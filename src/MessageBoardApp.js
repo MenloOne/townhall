@@ -1,6 +1,7 @@
 class MessageBoardApp {
   constructor(props) {
     this.view = props.view;
+    this.menloStorage = props.menloStorage;
 
     this.messages = [
       { id: 1, body: "App message 1" },
@@ -11,7 +12,7 @@ class MessageBoardApp {
 
   run() {
     this.view.setState({
-      messages: this.messages
+      messages: this.menloStorage.messages
     });
   }
 }
