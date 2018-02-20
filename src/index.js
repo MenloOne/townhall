@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from 'components/App';
+import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
 registerServiceWorker();
