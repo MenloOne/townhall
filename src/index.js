@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MessageBoardApp from 'MessageBoardApp'
-import MemoryStorage from 'MemoryStorage';
+import MemoryStorage from 'storage/MemoryStorage';
 import MemoryContract from 'contracts/MemoryContract';
 import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
