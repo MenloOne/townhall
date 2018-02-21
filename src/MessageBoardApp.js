@@ -2,6 +2,7 @@ class MessageBoardApp {
   constructor(props) {
     this.view = props.view;
     this.menloStorage = props.menloStorage;
+    this.contract = props.contract;
 
     this.view.setState({
       onCreateMessage: this.createMessage.bind(this)
@@ -15,6 +16,7 @@ class MessageBoardApp {
   }
 
   createMessage(message) {
+    this.contract.createMessage(message);
     this.menloStorage.createMessage(message);
     this.viewMessages();
   }
