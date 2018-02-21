@@ -2,6 +2,10 @@ class MemoryStorage {
   constructor() {
     this.messages = [];
     this.nextIDCounter = 0;
+
+    this.createMessage("Message 1");
+    this.createMessage("Message 2");
+    this.createMessage("Message 3");
   }
 
   nextID() {
