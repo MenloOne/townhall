@@ -4,6 +4,7 @@ import './MessageBoardView.css';
 class MessageBoardView extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       messages: [],
       newMessage: '',
@@ -14,19 +15,17 @@ class MessageBoardView extends Component {
   }
 
   renderMessages() {
-    if(this.state.messages.length > 0) {
-      let messageItems = this.state.messages.map((message) => {
-        return (<li key={message.id}>{message.body}</li>);
-      });
+    if(this.state.messages.length === 0) { return (<p>There are no messages.</p>); }
 
-      return (
-        <ul>
-          {messageItems}
-        </ul>
-      );
-    } else {
-      return (<p>There are no messages.</p>);
-    }
+    let messageItems = this.state.messages.map((message) => {
+      return (<li key={message.id}>{message.body}</li>);
+    });
+
+    return (
+      <ul>
+        {messageItems}
+      </ul>
+    );
   }
 
   onMessageFormSubmit(event) {
