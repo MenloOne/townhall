@@ -1,6 +1,7 @@
 class MessageBoardApp {
   constructor(props) {
     this.view = props.view;
+    this.localStorage = props.localStorage;
     this.menloStorage = props.menloStorage;
     this.contract = props.contract;
 
@@ -16,8 +17,10 @@ class MessageBoardApp {
   }
 
   createMessage(message) {
+    this.localStorage.createMessage(message);
     this.contract.createMessage(message);
     this.menloStorage.createMessage(message);
+
     this.viewMessages();
   }
 }
