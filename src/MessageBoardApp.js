@@ -10,7 +10,7 @@ class MessageBoardApp {
     ];
   }
 
-  run() {
+  viewMessages() {
     this.view.setState({
       messages: this.menloStorage.messages
     });

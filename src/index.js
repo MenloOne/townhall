@@ -9,5 +9,5 @@ import registerServiceWorker from './registerServiceWorker';
 let menloStorage = new MessageBoardStorage();
 let view = ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
 let app = new MessageBoardApp({view: view, menloStorage: menloStorage});
-app.run();
+app.viewMessages();
 registerServiceWorker();
