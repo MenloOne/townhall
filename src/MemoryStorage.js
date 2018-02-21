@@ -1,4 +1,4 @@
-class MessageBoardStorage {
+class MemoryStorage {
   constructor() {
     this.messages = [];
     this.nextIDCounter = 0;
@@ -14,4 +14,4 @@ class MessageBoardStorage {
   }
 }
 
-export default MessageBoardStorage;
+export default MemoryStorage;

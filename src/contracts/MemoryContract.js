@@ -1,7 +1,7 @@
-class MessageBoardContract {
+class MemoryContract {
   createMessage(message) {
     console.log("Creating a message in contract!");
   }
 }
 
-export default MessageBoardContract;
+export default MemoryContract;
