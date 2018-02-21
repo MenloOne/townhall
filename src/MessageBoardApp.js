@@ -8,12 +8,21 @@ class MessageBoardApp {
       { id: 2, body: "App message 2" },
       { id: 3, body: "App message 3" },
     ];
+
+    this.view.setState({
+      onCreateMessage: this.createMessage.bind(this)
+    });
   }
 
   viewMessages() {
     this.view.setState({
       messages: this.menloStorage.messages
     });
+  }
+
+  createMessage(message) {
+    this.menloStorage.createMessage(message);
+    this.viewMessages();
   }
 }
 
