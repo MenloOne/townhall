@@ -17,11 +17,12 @@ class MessageBoardApp {
   }
 
   createMessage(message) {
-    this.localStorage.createMessage(message);
-    this.contract.createMessage(message);
-    this.menloStorage.createMessage(message);
+    this.localStorage.createMessage(message).then((localMessage) => {
+      this.contract.createMessage(message);
+      this.menloStorage.createMessage(message);
 
-    this.viewMessages();
+      this.viewMessages();
+    });
   }
 }
 
