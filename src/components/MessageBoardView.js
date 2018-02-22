@@ -17,8 +17,8 @@ class MessageBoardView extends Component {
   renderMessages() {
     if(this.state.messages.length === 0) { return (<p>There are no messages.</p>); }
 
-    let messageItems = this.state.messages.map((message) => {
-      return (<li key={message.hash}>{message.body}</li>);
+    let messageItems = this.state.messages.map((message, hash) => {
+      return (<li key={hash}>{message.body}</li>);
     });
 
     return (

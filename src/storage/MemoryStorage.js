@@ -3,9 +3,9 @@ class MemoryStorage {
     this.messages = [];
     this.nextIDCounter = 0;
 
-    this.createMessage("Message 1");
-    this.createMessage("Message 2");
-    this.createMessage("Message 3");
+    this.createMessage({body: "Message 1"});
+    this.createMessage({body: "Message 2"});
+    this.createMessage({body: "Message 3"});
   }
 
   nextID() {
@@ -14,11 +14,17 @@ class MemoryStorage {
   }
 
   createMessage(message) {
-    var newMessage = Object.assign(message, {hash: this.nextID()});
-    this.messages.push(newMessage);
+    let messageID = this.nextID();
+    this.messages[messageID] = message;
 
     return new Promise((resolve, reject) => {
-      resolve(newMessage);
+      resolve(messageID);
+    });
+  }
+
+  findMessage(hash) {
+    return new Promise((resolve, reject) => {
+      resolve(this.messages[hash]);
     });
   }
 }

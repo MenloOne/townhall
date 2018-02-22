@@ -13,9 +13,18 @@ class IPFSStorage {
 
     return new Promise((resolve, reject) => {
       ipfsPromise.then(result => {
-        let messageInfo = Object.assign(message, {hash: result[0].hash})
-        resolve(messageInfo);
+        resolve(result[0].hash);
       })
+    });
+  }
+
+  findMessage(hash) {
+    let ipfsPromise = this.connection.cat(hash);
+
+    return new Promise((resolve, reject) => {
+      ipfsPromise.then(result => {
+        resolve(JSON.parse(result.toString()));
+      });
     });
   }
 }
