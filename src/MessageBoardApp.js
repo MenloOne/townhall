@@ -24,11 +24,11 @@ class MessageBoardApp {
     }
 
     this.localStorage.createMessage(message).then((messageHash) => {
-      this.contract.createMessage(messageHash).then((result) => {
-        this.menloStorage.createMessage(message).then((ignoreThis) => {
-          this.viewMessages();
-        });
-      });
+      return this.contract.createMessage(messageHash);
+    }).then((result) => {
+      return this.menloStorage.createMessage(message);
+    }).then(() => {
+      this.viewMessages();
     });
   }
 }
