@@ -16,7 +16,13 @@ class MessageBoardApp {
     });
   }
 
-  createMessage(message) {
+  createMessage(messageBody) {
+    let message = {
+      version: "CONTRACT_VERSION",
+      parent: "0",
+      body: messageBody
+    }
+
     this.localStorage.createMessage(message).then((localMessage) => {
       this.contract.createMessage(message);
       this.menloStorage.createMessage(message);

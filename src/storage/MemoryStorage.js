@@ -14,7 +14,7 @@ class MemoryStorage {
   }
 
   createMessage(message) {
-    var newMessage = {hash: this.nextID(), body: message};
+    var newMessage = Object.assign(message, {hash: this.nextID()});
     this.messages.push(newMessage);
 
     return new Promise((resolve, reject) => {
