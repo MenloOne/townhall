@@ -1,6 +1,9 @@
 class MemoryContract {
-  createMessage(message) {
+  createMessage(hash) {
     console.log("Creating a message in contract!");
+    return new Promise((resolve, reject) => {
+      resolve(true);
+    });
   }
 }
 
