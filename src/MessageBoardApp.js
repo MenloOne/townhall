@@ -1,4 +1,4 @@
-import {LocalIPFSError, ContractError, MenloIPFSError} from 'MessageBoardErrors';
+import MessageBoardError from 'MessageBoardError';
 
 class MessageBoardApp {
   constructor(props) {
@@ -18,34 +18,32 @@ class MessageBoardApp {
     });
   }
 
-  createMessage = (messageBody) => {
+  createMessage = async (messageBody) => {
     let message = {
       version: "CONTRACT_VERSION",
       parent: "0",
       body: messageBody
     };
 
-    let displayError = (message) => this.view.setState({error: {on: 'createMessage', message: message}});
+    try {
+      let messageHash = await this.localStorage.createMessage(message)
+        .catch(e => { throw new MessageBoardError('An error occurred saving the message to your local IPFS.') });
+      await this.contract.createMessage(messageHash)
+        .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
+      await this.menloStorage.createMessage(message)
+        .catch(e => { throw new MessageBoardError('An error occurred saving the message to Menlo IPFS.') });
+    }
+    catch(e) {
+      switch(e.name) {
+        case MessageBoardError.name:
+          this.view.setState({error: {on: 'createMessage', message: e.message}});
+          return;
+        default:
+          throw e;
+      }
+    }
 
-    return this.localStorage.createMessage(message)
-      .then(this.contract.createMessage)
-      .then(() => this.menloStorage.createMessage(message))
-      .then(() => this.viewMessages())
-      .catch(error => {
-        switch(error.name) {
-          case LocalIPFSError.name:
-            displayError('An error occurred saving the message to your local IPFS.');
-            break;
-          case ContractError.name:
-            displayError('An error occurred verifying the message.');
-            break;
-          case MenloIPFSError.name:
-            displayError('An error occurred saving the message to Menlo IPFS.');
-            break;
-          default:
-            displayError('An unknown error occurred.');
-        }
-      });
+    this.viewMessages();
   }
 }
 

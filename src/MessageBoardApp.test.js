@@ -1,5 +1,4 @@
 import MessageBoardApp from './MessageBoardApp';
-import {LocalIPFSError, ContractError, MenloIPFSError} from 'MessageBoardErrors';
 
 describe('MessageBoardApp', () => {
   describe('createMessage(messageBody)', () => {
@@ -56,7 +55,7 @@ describe('MessageBoardApp', () => {
     describe('local storage fails', () => {
       it('updates the view with an error message', done => {
         let view = {setState: jest.fn()};
-        let localStorage = {createMessage: jest.fn(() => Promise.reject(new LocalIPFSError()))};
+        let localStorage = {createMessage: jest.fn(() => Promise.reject('local storage failed'))};
         let contract = {};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
@@ -72,7 +71,7 @@ describe('MessageBoardApp', () => {
       it('updates the view with an error message', done => {
         let view = {setState: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
-        let contract = {createMessage: jest.fn(() => Promise.reject(new ContractError()))};
+        let contract = {createMessage: jest.fn(() => Promise.reject('contract failed'))};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
@@ -88,26 +87,11 @@ describe('MessageBoardApp', () => {
         let view = {setState: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        let menloStorage = {createMessage: jest.fn(() => Promise.reject(new MenloIPFSError()))};
+        let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
         app.createMessage('test message').then(() => {
           expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred saving the message to Menlo IPFS.'}});
-          done();
-        });
-      });
-    });
-
-    describe('some other error occurs', () => {
-      it('updates the view with an error message', done => {
-        let view = {setState: jest.fn()};
-        let localStorage = {createMessage: jest.fn(() => Promise.reject(new Error('funky')))};
-        let contract = {};
-        let menloStorage = {};
-        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
-
-        app.createMessage('test message').then(() => {
-          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An unknown error occurred.'}});
           done();
         });
       });
