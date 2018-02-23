@@ -63,5 +63,43 @@ describe(MessageBoardApp, () => {
         });
       });
     })
+
+    // For failure paths, I could explicitly check that the remaining functions don't get called,
+    // but I think it's simpler to just not define them at all and let it blow up if they're called
+    describe('local storage fails', () => {
+      it('raises the error message', () => {
+        let view = {setState: jest.fn()};
+        let localStorage = {createMessage: jest.fn(() => Promise.reject('local storage failed'))};
+        let contract = {};
+        let menloStorage = {};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+
+        return expect(app.createMessage('test message')).rejects.toMatch('local storage failed');
+      });
+    });
+
+    describe('contract fails', () => {
+      it('raises the error message', () => {
+        let view = {setState: jest.fn()};
+        let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
+        let contract = {createMessage: jest.fn(() => Promise.reject('contract failed'))};
+        let menloStorage = {};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+
+        return expect(app.createMessage('test message')).rejects.toMatch('contract failed');
+      });
+    });
+
+    describe('menlo storage fails', () => {
+      it('raises the error message', () => {
+        let view = {setState: jest.fn()};
+        let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
+        let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
+        let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+
+        return expect(app.createMessage('test message')).rejects.toMatch('menlo storage failed');
+      });
+    });
   });
 });
