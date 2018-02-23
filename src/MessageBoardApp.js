@@ -24,16 +24,12 @@ class MessageBoardApp {
       version: "CONTRACT_VERSION",
       parent: "0",
       body: messageBody
-    }
     };
 
-    return this.localStorage.createMessage(message).then((messageHash) => {
-      return this.contract.createMessage(messageHash);
-    }).then((result) => {
-      return this.menloStorage.createMessage(message);
-    }).then(() => {
-      this.viewMessages();
-    });
+    return this.localStorage.createMessage(message)
+      .then(this.contract.createMessage)
+      .then(() => this.menloStorage.createMessage(message))
+      .then(() => this.viewMessages());
   }
 }
 
