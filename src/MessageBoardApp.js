@@ -26,7 +26,10 @@ class MessageBoardApp {
     return this.localStorage.createMessage(message)
       .then(this.contract.createMessage)
       .then(() => this.menloStorage.createMessage(message))
-      .then(() => this.viewMessages());
+      .then(() => this.viewMessages())
+      .catch(error => {
+        this.view.setState({error: {on: 'createMessage', message: error.message}})
+      });
   }
 }
 

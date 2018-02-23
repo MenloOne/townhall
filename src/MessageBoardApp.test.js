@@ -53,38 +53,47 @@ describe(MessageBoardApp, () => {
     // For failure paths, I could explicitly check that the remaining functions don't get called,
     // but I think it's simpler to just not define them at all and let it blow up if they're called
     describe('local storage fails', () => {
-      it('raises the error message', () => {
+      it('updates the view with an error message', done => {
         let view = {setState: jest.fn()};
-        let localStorage = {createMessage: jest.fn(() => Promise.reject('local storage failed'))};
+        let localStorage = {createMessage: jest.fn(() => Promise.reject(new Error('An error occurred saving the message to your local IPFS.')))};
         let contract = {};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
-        return expect(app.createMessage('test message')).rejects.toMatch('local storage failed');
+        app.createMessage('test message').then(() => {
+          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred saving the message to your local IPFS.'}});
+          done();
+        });
       });
     });
 
     describe('contract fails', () => {
-      it('raises the error message', () => {
+      it('updates the view with an error message', done => {
         let view = {setState: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
-        let contract = {createMessage: jest.fn(() => Promise.reject('contract failed'))};
+        let contract = {createMessage: jest.fn(() => Promise.reject(new Error('An error occurred verifying the message.')))};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
-        return expect(app.createMessage('test message')).rejects.toMatch('contract failed');
+        app.createMessage('test message').then(() => {
+          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred verifying the message.'}});
+          done();
+        });
       });
     });
 
     describe('menlo storage fails', () => {
-      it('raises the error message', () => {
+      it('updates the view with an error message', done => {
         let view = {setState: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
+        let menloStorage = {createMessage: jest.fn(() => Promise.reject(new Error('An error occurred saving the message to Menlo IPFS.')))};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
-        return expect(app.createMessage('test message')).rejects.toMatch('menlo storage failed');
+        app.createMessage('test message').then(() => {
+          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred saving the message to Menlo IPFS.'}});
+          done();
+        });
       });
     });
   });
