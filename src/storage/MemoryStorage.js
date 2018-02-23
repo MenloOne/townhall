@@ -3,6 +3,8 @@ class MemoryStorage {
     this.messages = [];
     this.nextIDCounter = 0;
 
+    this.createMessage = this.createMessage.bind(this);
+
     this.createMessage({body: "Message 1"});
     this.createMessage({body: "Message 2"});
     this.createMessage({body: "Message 3"});

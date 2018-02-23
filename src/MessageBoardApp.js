@@ -5,8 +5,11 @@ class MessageBoardApp {
     this.menloStorage = props.menloStorage;
     this.contract = props.contract;
 
+    this.createMessage = this.createMessage.bind(this);
+    this.viewMessages = this.viewMessages.bind(this);
+
     this.view.setState({
-      onCreateMessage: this.createMessage.bind(this)
+      onCreateMessage: this.createMessage
     });
   }
 
@@ -22,8 +25,9 @@ class MessageBoardApp {
       parent: "0",
       body: messageBody
     }
+    };
 
-    this.localStorage.createMessage(message).then((messageHash) => {
+    return this.localStorage.createMessage(message).then((messageHash) => {
       return this.contract.createMessage(messageHash);
     }).then((result) => {
       return this.menloStorage.createMessage(message);
