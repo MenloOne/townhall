@@ -1,8 +1,6 @@
 class MemoryContract {
   createMessage = (hash) => {
-    return new Promise((resolve, reject) => {
-      resolve(true);
-    });
+    return Promise.resolve(true);
   }
 }
 

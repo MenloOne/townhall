@@ -17,15 +17,11 @@ class MemoryStorage {
     let messageID = this.nextID();
     this.messages[messageID] = message;
 
-    return new Promise((resolve, reject) => {
-      resolve(messageID);
-    });
+    return Promise.resolve(messageID);
   }
 
   findMessage(hash) {
-    return new Promise((resolve, reject) => {
-      resolve(this.messages[hash]);
-    });
+    return Promise.resolve(this.messages[hash]);
   }
 }
 
