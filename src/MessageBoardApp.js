@@ -1,3 +1,5 @@
+import {LocalIPFSError, ContractError, MenloIPFSError} from 'MessageBoardErrors';
+
 class MessageBoardApp {
   constructor(props) {
     this.view = props.view;
@@ -23,12 +25,26 @@ class MessageBoardApp {
       body: messageBody
     };
 
+    let displayError = (message) => this.view.setState({error: {on: 'createMessage', message: message}});
+
     return this.localStorage.createMessage(message)
       .then(this.contract.createMessage)
       .then(() => this.menloStorage.createMessage(message))
       .then(() => this.viewMessages())
       .catch(error => {
-        this.view.setState({error: {on: 'createMessage', message: error.message}})
+        switch(error.name) {
+          case LocalIPFSError.name:
+            displayError('An error occurred saving the message to your local IPFS.');
+            break;
+          case ContractError.name:
+            displayError('An error occurred verifying the message.');
+            break;
+          case MenloIPFSError.name:
+            displayError('An error occurred saving the message to Menlo IPFS.');
+            break;
+          default:
+            displayError('An unknown error occurred.');
+        }
       });
   }
 }
