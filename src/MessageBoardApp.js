@@ -5,21 +5,18 @@ class MessageBoardApp {
     this.menloStorage = props.menloStorage;
     this.contract = props.contract;
 
-    this.createMessage = this.createMessage.bind(this);
-    this.viewMessages = this.viewMessages.bind(this);
-
     this.view.setState({
       onCreateMessage: this.createMessage
     });
   }
 
-  viewMessages() {
+  viewMessages = () => {
     this.view.setState({
       messages: this.menloStorage.messages
     });
   }
 
-  createMessage(messageBody) {
+  createMessage = (messageBody) => {
     let message = {
       version: "CONTRACT_VERSION",
       parent: "0",

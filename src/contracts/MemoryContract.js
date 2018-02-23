@@ -1,11 +1,7 @@
 class MemoryContract {
-  constructor() {
-    this.createMessage = this.createMessage.bind(this);
-  }
-
-  createMessage(hash) {
-    console.log("Creating a message in contract!");
+  createMessage = (hash) => {
     return new Promise((resolve, reject) => {
+      console.log("Creating a message in contract!");
       resolve(true);
     });
   }

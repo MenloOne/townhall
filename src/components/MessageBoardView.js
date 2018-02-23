@@ -9,9 +9,6 @@ class MessageBoardView extends Component {
       messages: [],
       newMessage: '',
     }
-
-    this.onMessageFormChange = this.onMessageFormChange.bind(this);
-    this.onMessageFormSubmit = this.onMessageFormSubmit.bind(this);
   }
 
   renderMessages() {
@@ -28,13 +25,13 @@ class MessageBoardView extends Component {
     );
   }
 
-  onMessageFormSubmit(event) {
+  onMessageFormSubmit = (event) => {
     event.preventDefault();
     this.state.onCreateMessage(this.state.newMessage);
     this.setState({newMessage: ''});
   }
 
-  onMessageFormChange(event) {
+  onMessageFormChange = (event) => {
     this.setState({newMessage: event.target.value});
   }
 
