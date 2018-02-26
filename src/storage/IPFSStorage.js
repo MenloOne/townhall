@@ -11,20 +11,16 @@ class IPFSStorage {
     let messageBuffer = new Buffer(JSON.stringify(message));
     let ipfsPromise = this.connection.add(messageBuffer);
 
-    return new Promise(resolve => {
-      ipfsPromise.then(result => {
-        resolve(result[0].hash);
-      })
+    return ipfsPromise.then(result => {
+      return result[0].hash;
     });
   }
 
   findMessage(hash) {
     let ipfsPromise = this.connection.cat(hash);
 
-    return new Promise(resolve => {
-      ipfsPromise.then(result => {
-        resolve(JSON.parse(result.toString()));
-      });
+    return ipfsPromise.then(result => {
+      return JSON.parse(result.toString());
     });
   }
 }
