@@ -7,15 +7,11 @@ class MessageBoardApp {
     this.menloStorage = props.menloStorage;
     this.contract = props.contract;
 
-    this.view.setState({
-      onCreateMessage: this.createMessage
-    });
+    this.view.setOnCreateMessage(this.createMessage);
   }
 
   viewMessages = () => {
-    this.view.setState({
-      messages: this.menloStorage.messages
-    });
+    this.view.setMessages(this.menloStorage.messages);
   }
 
   createMessage = async (messageBody) => {
@@ -36,7 +32,7 @@ class MessageBoardApp {
     catch(e) {
       switch(e.name) {
         case MessageBoardError.name:
-          this.view.setState({error: {on: 'createMessage', message: e.message}});
+          this.view.setError('createMessage', e.message);
           return;
         default:
           throw e;

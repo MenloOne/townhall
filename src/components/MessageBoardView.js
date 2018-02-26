@@ -25,6 +25,18 @@ class MessageBoardView extends Component {
     );
   }
 
+  setOnCreateMessage = (handler) => {
+    this.setState({onCreateMessage: handler})
+  }
+
+  setMessages = (messages) => {
+    this.setState({messages: messages})
+  }
+
+  setError = (on, message) => {
+
+  }
+
   onMessageFormSubmit = (event) => {
     event.preventDefault();
     this.state.onCreateMessage(this.state.newMessage);

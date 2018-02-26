@@ -6,7 +6,7 @@ describe('MessageBoardApp', () => {
       let view, localStorage, contract, menloStorage, app;
 
       beforeEach(() => {
-        view = {setState: jest.fn()};
+        view = {setOnCreateMessage: jest.fn(), setMessages: jest.fn()};
         localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         contract = {createMessage: jest.fn(() => Promise.resolve(true))};
         menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), messages: ['message 1', 'message 2']};
@@ -44,7 +44,7 @@ describe('MessageBoardApp', () => {
 
       it('refreshes the messages view', done => {
         app.createMessage("test message").then(() => {
-          expect(view.setState).toHaveBeenLastCalledWith({messages: ['message 1', 'message 2']});
+          expect(view.setMessages).toHaveBeenCalledWith(['message 1', 'message 2']);
           done();
         });
       });
@@ -54,14 +54,14 @@ describe('MessageBoardApp', () => {
     // but I think it's simpler to just not define them at all and let it blow up if they're called
     describe('local storage fails', () => {
       it('updates the view with an error message', done => {
-        let view = {setState: jest.fn()};
+        let view = {setOnCreateMessage: jest.fn(), setError: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.reject('local storage failed'))};
         let contract = {};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
         app.createMessage('test message').then(() => {
-          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred saving the message to your local IPFS.'}});
+          expect(view.setError).toHaveBeenCalledWith('createMessage', 'An error occurred saving the message to your local IPFS.');
           done();
         });
       });
@@ -69,14 +69,14 @@ describe('MessageBoardApp', () => {
 
     describe('contract fails', () => {
       it('updates the view with an error message', done => {
-        let view = {setState: jest.fn()};
+        let view = {setOnCreateMessage: jest.fn(), setError: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.reject('contract failed'))};
         let menloStorage = {};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
         app.createMessage('test message').then(() => {
-          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred verifying the message.'}});
+          expect(view.setError).toHaveBeenLastCalledWith('createMessage', 'An error occurred verifying the message.');
           done();
         });
       });
@@ -84,14 +84,14 @@ describe('MessageBoardApp', () => {
 
     describe('menlo storage fails', () => {
       it('updates the view with an error message', done => {
-        let view = {setState: jest.fn()};
+        let view = {setOnCreateMessage: jest.fn(), setError: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
         let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
         app.createMessage('test message').then(() => {
-          expect(view.setState).toHaveBeenLastCalledWith({error: {on: 'createMessage', message: 'An error occurred saving the message to Menlo IPFS.'}});
+          expect(view.setError).toHaveBeenLastCalledWith('createMessage', 'An error occurred saving the message to Menlo IPFS.');
           done();
         });
       });
