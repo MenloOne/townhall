@@ -32,13 +32,14 @@ class MessageBoardApp {
     catch(e) {
       switch(e.name) {
         case MessageBoardError.name:
-          this.view.setError('createMessage', e.message);
+          this.view.messageSendFailed(e.message);
           return;
         default:
           throw e;
       }
     }
 
+    this.view.messageSendSucceeded();
     this.viewMessages();
   }
 }
