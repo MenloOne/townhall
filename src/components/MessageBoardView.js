@@ -9,16 +9,13 @@ class MessageBoardView extends Component {
       messages: [],
       newMessage: '',
     }
-
-    this.onMessageFormChange = this.onMessageFormChange.bind(this);
-    this.onMessageFormSubmit = this.onMessageFormSubmit.bind(this);
   }
 
   renderMessages() {
     if(this.state.messages.length === 0) { return (<p>There are no messages.</p>); }
 
-    let messageItems = this.state.messages.map((message) => {
-      return (<li key={message.id}>{message.body}</li>);
+    let messageItems = this.state.messages.map((message, hash) => {
+      return (<li key={hash}>{message.body}</li>);
     });
 
     return (
@@ -28,18 +25,37 @@ class MessageBoardView extends Component {
     );
   }
 
-  onMessageFormSubmit(event) {
-    event.preventDefault();
-    this.state.onCreateMessage(this.state.newMessage);
-    this.setState({newMessage: ''});
+  setOnCreateMessage = (handler) => {
+    this.setState({onCreateMessage: handler})
   }
 
-  onMessageFormChange(event) {
+  setMessages = (messages) => {
+    this.setState({messages: messages})
+  }
+
+  messageSendSucceeded = () => {
+    this.setState({error: null, newMessage: ''});
+  }
+
+  messageSendFailed = (errorMessage) => {
+    this.setState({error: errorMessage});
+  }
+
+  onMessageFormSubmit = (event) => {
+    event.preventDefault();
+    this.state.onCreateMessage(this.state.newMessage);
+  }
+
+  onMessageFormChange = (event) => {
     this.setState({newMessage: event.target.value});
   }
 
   renderCreateMessage() {
     if(!this.state.onCreateMessage) { return; }
+    let errorMessage;
+    if(this.state.error) {
+      errorMessage = (<div>{this.state.error}</div>);
+    }
 
     return (
       <form onSubmit={this.onMessageFormSubmit}>
@@ -48,6 +64,7 @@ class MessageBoardView extends Component {
           <input type="text" value={this.state.newMessage} onChange={this.onMessageFormChange} />
           <input type="submit" value="Send" />
         </label>
+        {errorMessage}
       </form>
     );
   }
