@@ -7,9 +7,9 @@ describe('MessageBoardApp', () => {
 
       beforeEach(() => {
         view = {setOnCreateMessage: jest.fn(), setMessages: jest.fn(), messageSendSucceeded: jest.fn()};
-        localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
+        localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), messages: jest.fn(() => ['message 1', 'message 2'])};
         contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), messages: ['message 1', 'message 2']};
+        menloStorage = {pin: jest.fn(() => Promise.resolve(true))};
         app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
       });
 
@@ -31,13 +31,9 @@ describe('MessageBoardApp', () => {
         });
       });
 
-      it('creates the message on menlo storage', done => {
+      it('pins the message on menlo storage using the IPFS hash', done => {
         app.createMessage("test message").then(() => {
-          expect(menloStorage.createMessage).toHaveBeenCalledWith({
-            version: "CONTRACT_VERSION",
-            parent: "0",
-            body: "test message"
-          });
+          expect(menloStorage.pin).toHaveBeenCalledWith('localHash');
           done();
         });
       });
@@ -89,12 +85,12 @@ describe('MessageBoardApp', () => {
       });
     });
 
-    describe('menlo storage fails', () => {
+    describe('pinning on menlo storage fails', () => {
       it('updates the view with an error message', done => {
         let view = {setOnCreateMessage: jest.fn(), messageSendFailed: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
+        let menloStorage = {pin: jest.fn(() => Promise.reject('menlo storage failed'))};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
 
         app.createMessage('test message').then(() => {
