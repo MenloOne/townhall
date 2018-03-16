@@ -1,7 +1,7 @@
 import ipfsAPI from 'ipfs-api';
 import {Buffer} from 'buffer';
 
-class IPFSStorage {
+class RemoteIPFSStorage {
   constructor(connectionOptions) {
     this.connectionOptions = connectionOptions;
     this.connection = ipfsAPI(connectionOptions);
@@ -31,4 +31,4 @@ class IPFSStorage {
   }
 }
 
-export default IPFSStorage;
+export default RemoteIPFSStorage;
