@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "buffer": "^5.1.0",
+    "ipfs": "^0.28.2",
     "ipfs-api": "^18.1.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
