@@ -10,7 +10,7 @@ class MessageBoardApp {
     this.view = props.view;
     this.localStorage = props.localStorage;
     this.menloStorage = props.menloStorage;
-    this.contract = props.contract;
+    this.forum = props.forum;
     this.graph = props.graph;
 
     this.graph.addNode('0');
@@ -45,7 +45,7 @@ class MessageBoardApp {
     try {
       let messageHash = await this.localStorage.createMessage(message)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to your local IPFS.') });
-      await this.contract.createMessage(messageHash, message.parent)
+      await this.forum.post(messageHash, message.parent)
         .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
       this.graph.addNode(messageHash, message.parent)
       await this.menloStorage.pin(messageHash)
