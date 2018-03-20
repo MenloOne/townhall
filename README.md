@@ -6,6 +6,24 @@
 2. Run the daemon: `ipfs daemon`
 3. Visit `http://localhost:5001/webui` in the browser (Chrome works, Safari doesn't)
 
+### Add the Websocket listener
+
+Add the following entry to your `Swarm` array in `~.ipfs/config`: `/ip4/127.0.0.1/tcp/9999/ws`.
+Now, it should look like this:
+
+```
+"Addresses": {
+  "Swarm": [
+    "/ip4/0.0.0.0/tcp/4002",
+    "/ip4/127.0.0.1/tcp/9999/ws"
+  ],
+  "API": "/ip4/127.0.0.1/tcp/5002",
+  "Gateway": "/ip4/127.0.0.1/tcp/9090"
+}
+```
+
+Restart the ipfs daemon
+
 ### (Temporarily?) disable CORS
 
 From [js-ipfs-api documentation](https://github.com/ipfs/js-ipfs-api/tree/master/examples/bundle-browserify#setup):
