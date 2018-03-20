@@ -8,6 +8,7 @@ import MemoryContract from 'contracts/MemoryContract';
 import MessageBoardGraph from 'storage/MessageBoardGraph';
 import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
+import web3 from 'web3_override';
 
 window.addEventListener('load', function() {
   let menloStorage = new RemoteIPFSStorage();
@@ -27,7 +28,8 @@ window.addEventListener('load', function() {
   app.viewMessages();
 
   console.log("metamask is...")
-  console.log(web3)
+  window.web3 = web3
+  console.log(web3.eth.accounts)
 
   registerServiceWorker();
 });
