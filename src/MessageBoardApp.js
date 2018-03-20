@@ -24,6 +24,8 @@ class MessageBoardApp {
   }
 
   showBalance = () => {
+    if(!web3) { return }
+
     Token.setProvider(web3.currentProvider);
     web3.eth.getAccounts((err, result) => {
       let account = result[0];
