@@ -12,14 +12,17 @@ Add the following entry to your `Swarm` array in `~.ipfs/config`: `/ip4/127.0.0.
 Now, it should look like this:
 
 ```
-"Addresses": {
-  "Swarm": [
-    "/ip4/0.0.0.0/tcp/4002",
-    "/ip4/127.0.0.1/tcp/9999/ws"
-  ],
-  "API": "/ip4/127.0.0.1/tcp/5002",
-  "Gateway": "/ip4/127.0.0.1/tcp/9090"
-}
+  "Addresses": {
+    "API": "/ip4/127.0.0.1/tcp/5001",
+    "Announce": [],
+    "Gateway": "/ip4/127.0.0.1/tcp/8080",
+    "NoAnnounce": [],
+    "Swarm": [
+      "/ip4/0.0.0.0/tcp/4001",
+      "/ip6/::/tcp/4001",
+      "/ip4/127.0.0.1/tcp/9999/ws"
+    ]
+  }
 ```
 
 Restart the ipfs daemon
