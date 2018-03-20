@@ -26,5 +26,8 @@ window.addEventListener('load', function() {
 
   app.viewMessages();
 
+  console.log("metamask is...")
+  console.log(web3)
+
   registerServiceWorker();
 });
