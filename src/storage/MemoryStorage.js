@@ -23,6 +23,10 @@ class MemoryStorage {
   findMessage(hash) {
     return Promise.resolve(this.messages[hash]);
   }
+
+  pin(hash) {
+    return Promise.resolve(true);
+  }
 }
 
 export default MemoryStorage;

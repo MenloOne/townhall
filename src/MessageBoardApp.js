@@ -11,7 +11,7 @@ class MessageBoardApp {
   }
 
   viewMessages = () => {
-    this.view.setMessages(this.menloStorage.messages);
+    this.view.setMessages(this.localStorage.messages());
   }
 
   createMessage = async (messageBody) => {
@@ -26,7 +26,7 @@ class MessageBoardApp {
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to your local IPFS.') });
       await this.contract.createMessage(messageHash)
         .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
-      await this.menloStorage.createMessage(message)
+      await this.menloStorage.pin(messageHash)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to Menlo IPFS.') });
     }
     catch(e) {

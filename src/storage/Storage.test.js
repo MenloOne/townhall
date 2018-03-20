@@ -1,5 +1,5 @@
 import MemoryStorage from './MemoryStorage';
-import IPFSStorage from './IPFSStorage';
+import RemoteIPFSStorage from './RemoteIPFSStorage';
 
 function testStorage(klass) {
   describe(klass.name, () => {
@@ -31,4 +31,4 @@ function testStorage(klass) {
 }
 
 testStorage(MemoryStorage);
-testStorage(IPFSStorage);
+testStorage(RemoteIPFSStorage);
