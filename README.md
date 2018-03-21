@@ -54,10 +54,20 @@ For a more consistent, local testing environment, use Parity.
 #### Parity
 
 Another option, which also enables interacting with the rest of Ethereum, is
-to run a private dev chain with Parity, install and run a private dev chain:
+to run a private dev chain with Parity.
+
+You need to unlock your account to be able to run Truffle migrations easily.
+One method is to pass the account address and a password file when running parity,
+that method is demonstrated below.
+
+You can also call the `personal_unlockAccount` rpc method.
 
         brew install parity
-        parity --config dev
+        parity --config dev --unlock 0x00a329c0648769A73afAc7F9381E08FB43dBEA72 --password parity.account --force-ui  --jsonrpc-cors all -lrpc=trace --jsonrpc-apis web3,eth,net,personal,parity,parity_set,traces,rpc,parity_accounts  --no-persistent-txqueue
+
+Use the `integration` network defined in `truffle.js` when using parity.
+
+        yarn run truffle deploy --network integration
 
 Parity has a lot of config and features: [Read the effin manual](https://wiki.parity.io/Private-development-chain)
 
@@ -66,11 +76,20 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 1. Install nvm and node: `brew install nvm && nvm install`
 2. Clone the repo: `git clone git@github.com:vulcanize/message_board_reactjs.git`
 3. Install dependencies: `cd message_board_reactjs && nvm use && yarn install`
-4. Run Ganache: GUI or 'ganache-cli -p 7545'
+4. Run Ganache: GUI or `ganache-cli -p 7545`
 4. Deploy the contracts: `yarn run truffle deploy`
 5. Run the app: `yarn start`
 
 It should open a browser to `http://localhost:3000/`
+
+You can obtain the deployed contracts addresses with `truffle network`:
+
+        Network: integration (id: 17)
+          Forum: 0x84617303947304444ceb641582c024f277bbf4ff
+          Lottery: 0x277ad07109fe52a742b808a3e6765ee1ad0e7ad2
+          Migrations: 0xa782e56950bdd9f5c3e8693c9d2a78e524e3e612
+          Token: 0x01c957395029e9accbcb25a6ab72c618252cacf9
+
 
 ### Testing
 
