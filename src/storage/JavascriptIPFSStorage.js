@@ -45,10 +45,6 @@ class JavascriptIPFSStorage {
   isOnline() {
     return this.ipfs.isOnline() && this.connectedToPeer;
   }
-
-  messages() {
-    return this.messagesList;
-  }
 }
 
 export default JavascriptIPFSStorage;
