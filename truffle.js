@@ -4,7 +4,7 @@ module.exports = {
     development: {
       host: "127.0.0.1",
       port: 7545,
-      network_id: "*"
+      network_id: "5777"
     },
     cli: {
       host: "127.0.0.1",
