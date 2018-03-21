@@ -82,7 +82,7 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 
 It should open a browser to `http://localhost:3000/`
 
-You can obtain the deployed contracts addresses with `truffle network`:
+You can obtain the deployed contracts addresses with `yarn run truffle network`:
 
         Network: integration (id: 17)
           Forum: 0x84617303947304444ceb641582c024f277bbf4ff
@@ -111,4 +111,3 @@ You can obtain the deployed contracts addresses with `truffle network`:
 ## Production and Mainnet
 
 ...
-
