@@ -69,11 +69,24 @@ class MessageBoardView extends Component {
     );
   }
 
+  updateBalance(accountDetails) {
+    this.setState({accountDetails: accountDetails});
+  }
+
+  renderAccountDetails() {
+    if(!this.state.accountDetails) { return; }
+
+    return (
+      <div>{this.state.accountDetails.account} ({this.state.accountDetails.balance} MET)</div>
+    )
+  }
+
   render() {
     return (
       <div className="MessageBoardView">
         {this.renderMessages()}
         {this.renderCreateMessage()}
+        {this.renderAccountDetails()}
       </div>
     );
   }
