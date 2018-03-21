@@ -7,9 +7,9 @@ describe('MessageBoardApp', () => {
 
       beforeEach(() => {
         view = {setOnCreateMessage: jest.fn(), setMessages: jest.fn(), messageSendSucceeded: jest.fn()};
-        localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
+        localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), findMessage: jest.fn((hash) => Promise.resolve(Object.assign({'message1': 'message 1', 'message2': 'message 2'})[hash]))};
         contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), findMessage: jest.fn((hash) => Promise.resolve(Object.assign({'message1': 'message 1', 'message2': 'message 2'})[hash]))};
+        menloStorage = {pin: jest.fn(() => Promise.resolve(true))};
         graph = {addNode: jest.fn(() => true), children: jest.fn(() => ['message1', 'message2'])}
         app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
       });
@@ -39,13 +39,9 @@ describe('MessageBoardApp', () => {
         });
       })
 
-      it('creates the message on menlo storage', done => {
+      it('pins the message on menlo storage using the IPFS hash', done => {
         app.createMessage("test message").then(() => {
-          expect(menloStorage.createMessage).toHaveBeenCalledWith({
-            version: "CONTRACT_VERSION",
-            parent: "0",
-            body: "test message"
-          }, 'localHash');
+          expect(menloStorage.pin).toHaveBeenCalledWith('localHash');
           done();
         });
       });
@@ -57,10 +53,10 @@ describe('MessageBoardApp', () => {
         });
       })
 
-      it('looks up the top-level messages from menlo storage', done => {
+      it('looks up the top-level messages from local storage', done => {
         app.createMessage("test message").then(() => {
-          expect(menloStorage.findMessage).toHaveBeenCalledWith("message1")
-          expect(menloStorage.findMessage).toHaveBeenCalledWith("message2")
+          expect(localStorage.findMessage).toHaveBeenCalledWith("message1")
+          expect(localStorage.findMessage).toHaveBeenCalledWith("message2")
           done();
         });
       })
@@ -107,12 +103,12 @@ describe('MessageBoardApp', () => {
       });
     });
 
-    describe('menlo storage fails', () => {
+    describe('pinning on menlo storage fails', () => {
       it('updates the view with an error message', done => {
         let view = {setOnCreateMessage: jest.fn(), messageSendFailed: jest.fn()};
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
+        let menloStorage = {pin: jest.fn(() => Promise.reject('menlo storage failed'))};
         let graph = {addNode: jest.fn(() => true)};
         let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
 

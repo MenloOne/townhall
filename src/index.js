@@ -2,16 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MessageBoardApp from 'MessageBoardApp'
-import MemoryStorage from 'storage/MemoryStorage';
-import IPFSStorage from 'storage/IPFSStorage';
+import JavascriptIPFSStorage from 'storage/JavascriptIPFSStorage';
+import RemoteIPFSStorage from 'storage/RemoteIPFSStorage';
 import MemoryContract from 'contracts/MemoryContract';
 import MessageBoardGraph from 'storage/MessageBoardGraph';
 import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
 
-let localStorage = new IPFSStorage();
+let menloStorage = new RemoteIPFSStorage();
+let localStorage = new JavascriptIPFSStorage();
+localStorage.connectPeer(menloStorage);
 let contract = new MemoryContract();
-let menloStorage = new MemoryStorage();
 let graph = new MessageBoardGraph();
 let view = ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
 let app = new MessageBoardApp({
@@ -23,5 +24,6 @@ let app = new MessageBoardApp({
 });
 
 app.viewMessages();
+window.app = app;
 
 registerServiceWorker();

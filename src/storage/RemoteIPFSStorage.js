@@ -1,10 +1,11 @@
 import ipfsAPI from 'ipfs-api';
 import dagCBOR from "ipld-dag-cbor"
 
-class IPFSStorage {
+class RemoteIPFSStorage {
   constructor(connectionOptions) {
     this.connectionOptions = connectionOptions;
     this.connection = ipfsAPI(connectionOptions);
+    this.messagesList = [];
   }
 
   createMessage(message) {
@@ -26,6 +27,16 @@ class IPFSStorage {
       })
     })
   }
+
+  pin(hash) {
+    return this.connection.pin.add(hash).then(result => {
+      return result && result.length > 0;
+    })
+  }
+
+  messages() {
+    return this.messagesList;
+  }
 }
 
-export default IPFSStorage;
+export default RemoteIPFSStorage;

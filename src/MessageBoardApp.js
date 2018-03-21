@@ -14,7 +14,7 @@ class MessageBoardApp {
 
   viewMessages = async () => {
     let messageIDs = this.graph.children('0');
-    let messages = await Promise.all(messageIDs.map((mid) => this.menloStorage.findMessage(mid)));
+    let messages = await Promise.all(messageIDs.map((mid) => this.localStorage.findMessage(mid)));
     this.view.setMessages(messages);
   }
 
@@ -31,7 +31,7 @@ class MessageBoardApp {
       await this.contract.createMessage(messageHash, message.parent)
         .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
       this.graph.addNode(messageHash, message.parent)
-      await this.menloStorage.createMessage(message, messageHash)
+      await this.menloStorage.pin(messageHash)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to Menlo IPFS.') });
     }
     catch(e) {

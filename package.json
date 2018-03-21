@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "buffer": "^5.1.0",
+    "ipfs": "^0.28.2",
     "ipfs-api": "^18.1.1",
     "ipld-dag-cbor": "^0.12.0",
     "react": "^16.2.0",
@@ -15,5 +16,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "truffle": "^4.1.3"
   }
 }
