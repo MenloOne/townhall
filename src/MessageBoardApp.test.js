@@ -45,7 +45,7 @@ describe('MessageBoardApp', () => {
             version: "CONTRACT_VERSION",
             parent: "0",
             body: "test message"
-          });
+          }, 'localHash');
           done();
         });
       });

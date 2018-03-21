@@ -10,8 +10,9 @@ class MemoryStorage {
   }
 
   createMessage = (message, cid) => {
-    this.messages[cid] = message;
-    return Promise.resolve(true);
+    let theID = cid || this.nextID();
+    this.messages[theID] = message;
+    return Promise.resolve(theID);
   }
 
   findMessage(hash) {
