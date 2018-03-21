@@ -16,7 +16,7 @@ class MemoryStorage {
   }
 
   findMessage(hash) {
-    return this.messages[hash];
+    return Promise.resolve(this.messages[hash]);
   }
 }
 

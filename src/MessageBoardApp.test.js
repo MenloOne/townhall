@@ -9,7 +9,7 @@ describe('MessageBoardApp', () => {
         view = {setOnCreateMessage: jest.fn(), setMessages: jest.fn(), messageSendSucceeded: jest.fn()};
         localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), findMessage: jest.fn((hash) => Object.assign({'message1': 'message 1', 'message2': 'message 2'})[hash])};
+        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), findMessage: jest.fn((hash) => Promise.resolve(Object.assign({'message1': 'message 1', 'message2': 'message 2'})[hash]))};
         graph = {addNode: jest.fn(() => true), children: jest.fn(() => ['message1', 'message2'])}
         app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
       });

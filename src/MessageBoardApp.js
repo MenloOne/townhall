@@ -12,10 +12,10 @@ class MessageBoardApp {
     this.view.setOnCreateMessage(this.createMessage);
   }
 
-  viewMessages = () => {
+  viewMessages = async () => {
     let messageIDs = this.graph.children('0');
-    let messages = messageIDs.map((mid) => this.menloStorage.findMessage(mid))
-    this.view.setMessages(messages)
+    let messages = await Promise.all(messageIDs.map((mid) => this.menloStorage.findMessage(mid)));
+    this.view.setMessages(messages);
   }
 
   createMessage = async (messageBody) => {
@@ -45,7 +45,7 @@ class MessageBoardApp {
     }
 
     this.view.messageSendSucceeded();
-    this.viewMessages();
+    await this.viewMessages();
   }
 }
 
