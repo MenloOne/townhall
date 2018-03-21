@@ -46,6 +46,11 @@ Restart the daemon.
 
 For a light and easy to use private chain, try [Ganache](http://truffleframework.com/ganache/).
 
+Note: Ganache is intended to be used for transitory use, once you shutdown Ganache you will
+have to redeploy the contracts and any transactions such as token balances.
+
+For a more consistent, local testing environment, use Parity.
+
 #### Parity
 
 Another option, which also enables interacting with the rest of Ethereum, is
