@@ -1,11 +1,7 @@
 class MemoryStorage {
   constructor() {
-    this.messages = [];
+    this.messages = {};
     this.nextIDCounter = 0;
-
-    this.createMessage({body: "Message 1"});
-    this.createMessage({body: "Message 2"});
-    this.createMessage({body: "Message 3"});
   }
 
   nextID() {
@@ -13,15 +9,13 @@ class MemoryStorage {
     return this.nextIDCounter;
   }
 
-  createMessage = (message) => {
-    let messageID = this.nextID();
-    this.messages[messageID] = message;
-
-    return Promise.resolve(messageID);
+  createMessage = (message, cid) => {
+    this.messages[cid] = message;
+    return Promise.resolve(true);
   }
 
   findMessage(hash) {
-    return Promise.resolve(this.messages[hash]);
+    return this.messages[hash];
   }
 }
 

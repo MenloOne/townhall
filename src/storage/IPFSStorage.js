@@ -1,5 +1,5 @@
 import ipfsAPI from 'ipfs-api';
-import {Buffer} from 'buffer';
+import dagCBOR from "ipld-dag-cbor"
 
 class IPFSStorage {
   constructor(connectionOptions) {
@@ -8,20 +8,23 @@ class IPFSStorage {
   }
 
   createMessage(message) {
-    let messageBuffer = new Buffer(JSON.stringify(message));
-    let ipfsPromise = this.connection.add(messageBuffer);
-
-    return ipfsPromise.then(result => {
-      return result[0].hash;
-    });
+    return new Promise(resolve => {
+      dagCBOR.util.serialize(message, (err, serialized) => {
+        this.connection.add(serialized, {'cid-version': '1'}).then(result => {
+          resolve(result[0].hash)
+        })
+      })
+    })
   }
 
   findMessage(hash) {
     let ipfsPromise = this.connection.cat(hash);
 
-    return ipfsPromise.then(result => {
-      return JSON.parse(result.toString());
-    });
+    return new Promise(resolve => {
+      ipfsPromise.then(result => {
+        dagCBOR.util.deserialize(result, (err, object) => resolve(object))
+      })
+    })
   }
 }
 
