@@ -5,14 +5,22 @@ import MessageBoardApp from 'MessageBoardApp'
 import MemoryStorage from 'storage/MemoryStorage';
 import IPFSStorage from 'storage/IPFSStorage';
 import MemoryContract from 'contracts/MemoryContract';
+import MessageBoardGraph from 'storage/MessageBoardGraph';
 import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
 
 let localStorage = new IPFSStorage();
 let contract = new MemoryContract();
 let menloStorage = new MemoryStorage();
+let graph = new MessageBoardGraph();
 let view = ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
-let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+let app = new MessageBoardApp({
+  view: view,
+  localStorage: localStorage,
+  graph: graph,
+  menloStorage: menloStorage,
+  contract: contract,
+});
 
 app.viewMessages();
 

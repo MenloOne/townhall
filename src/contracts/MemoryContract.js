@@ -1,5 +1,5 @@
 class MemoryContract {
-  createMessage = (hash) => {
+  createMessage = (hash, parentHash) => {
     return Promise.resolve(true);
   }
 }

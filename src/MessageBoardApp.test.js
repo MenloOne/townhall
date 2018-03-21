@@ -3,14 +3,15 @@ import MessageBoardApp from './MessageBoardApp';
 describe('MessageBoardApp', () => {
   describe('createMessage(messageBody)', () => {
     describe('successful', () => {
-      let view, localStorage, contract, menloStorage, app;
+      let view, localStorage, contract, menloStorage, graph, app;
 
       beforeEach(() => {
         view = {setOnCreateMessage: jest.fn(), setMessages: jest.fn(), messageSendSucceeded: jest.fn()};
         localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         contract = {createMessage: jest.fn(() => Promise.resolve(true))};
-        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), messages: ['message 1', 'message 2']};
-        app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+        menloStorage = {createMessage: jest.fn(() => Promise.resolve('localHash')), findMessage: jest.fn((hash) => Object.assign({'message1': 'message 1', 'message2': 'message 2'})[hash])};
+        graph = {addNode: jest.fn(() => true), children: jest.fn(() => ['message1', 'message2'])}
+        app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
       });
 
       it('creates the message on local storage', done => {
@@ -24,12 +25,19 @@ describe('MessageBoardApp', () => {
         });
       });
 
-      it('creates the message on the contract using the IPFS hash', done => {
+      it('creates the message on the contract using the IPFS hash and the root parent', done => {
         app.createMessage("test message").then(() => {
-          expect(contract.createMessage).toHaveBeenCalledWith('localHash');
+          expect(contract.createMessage).toHaveBeenCalledWith('localHash', '0');
           done();
         });
       });
+
+      it('adds the message hash to the graph with the root parent', done => {
+        app.createMessage("test message").then(() => {
+          expect(graph.addNode).toHaveBeenCalledWith('localHash', '0');
+          done();
+        });
+      })
 
       it('creates the message on menlo storage', done => {
         app.createMessage("test message").then(() => {
@@ -45,6 +53,14 @@ describe('MessageBoardApp', () => {
       it('notifies the view that the message was sent successfully', done => {
         app.createMessage("test message").then(() => {
           expect(view.messageSendSucceeded).toHaveBeenCalledWith();
+          done();
+        });
+      })
+
+      it('looks up the top-level messages from menlo storage', done => {
+        app.createMessage("test message").then(() => {
+          expect(menloStorage.findMessage).toHaveBeenCalledWith("message1")
+          expect(menloStorage.findMessage).toHaveBeenCalledWith("message2")
           done();
         });
       })
@@ -65,7 +81,8 @@ describe('MessageBoardApp', () => {
         let localStorage = {createMessage: jest.fn(() => Promise.reject('local storage failed'))};
         let contract = {};
         let menloStorage = {};
-        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+        let graph = {addNode: jest.fn(() => true)};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
 
         app.createMessage('test message').then(() => {
           expect(view.messageSendFailed).toHaveBeenCalledWith('An error occurred saving the message to your local IPFS.');
@@ -80,7 +97,8 @@ describe('MessageBoardApp', () => {
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.reject('contract failed'))};
         let menloStorage = {};
-        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+        let graph = {addNode: jest.fn(() => true)};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
 
         app.createMessage('test message').then(() => {
           expect(view.messageSendFailed).toHaveBeenLastCalledWith('An error occurred verifying the message.');
@@ -95,7 +113,8 @@ describe('MessageBoardApp', () => {
         let localStorage = {createMessage: jest.fn(() => Promise.resolve('localHash'))};
         let contract = {createMessage: jest.fn(() => Promise.resolve(true))};
         let menloStorage = {createMessage: jest.fn(() => Promise.reject('menlo storage failed'))};
-        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, contract: contract});
+        let graph = {addNode: jest.fn(() => true)};
+        let app = new MessageBoardApp({view: view, localStorage: localStorage, menloStorage: menloStorage, graph: graph, contract: contract});
 
         app.createMessage('test message').then(() => {
           expect(view.messageSendFailed).toHaveBeenLastCalledWith('An error occurred saving the message to Menlo IPFS.');
