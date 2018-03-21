@@ -6,12 +6,16 @@ class MessageBoardApp {
     this.localStorage = props.localStorage;
     this.menloStorage = props.menloStorage;
     this.contract = props.contract;
+    this.graph = props.graph;
 
+    this.graph.addNode('0');
     this.view.setOnCreateMessage(this.createMessage);
   }
 
-  viewMessages = () => {
-    this.view.setMessages(this.localStorage.messages());
+  viewMessages = async () => {
+    let messageIDs = this.graph.children('0');
+    let messages = await Promise.all(messageIDs.map((mid) => this.localStorage.findMessage(mid)));
+    this.view.setMessages(messages);
   }
 
   createMessage = async (messageBody) => {
@@ -24,8 +28,9 @@ class MessageBoardApp {
     try {
       let messageHash = await this.localStorage.createMessage(message)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to your local IPFS.') });
-      await this.contract.createMessage(messageHash)
+      await this.contract.createMessage(messageHash, message.parent)
         .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
+      this.graph.addNode(messageHash, message.parent)
       await this.menloStorage.pin(messageHash)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to Menlo IPFS.') });
     }
@@ -40,7 +45,7 @@ class MessageBoardApp {
     }
 
     this.view.messageSendSucceeded();
-    this.viewMessages();
+    await this.viewMessages();
   }
 }
 

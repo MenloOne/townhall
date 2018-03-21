@@ -18,7 +18,7 @@ class JavascriptIPFSStorage {
 
   findMessage(hash) {
     return new Promise((resolve, reject) => {
-      this.ipfs.get.put(hash, (err, result) => {
+      this.ipfs.dag.get(hash, (err, result) => {
         resolve(result.value);
       })
     })
@@ -44,10 +44,6 @@ class JavascriptIPFSStorage {
 
   isOnline() {
     return this.ipfs.isOnline() && this.connectedToPeer;
-  }
-
-  messages() {
-    return this.messagesList;
   }
 }
 
