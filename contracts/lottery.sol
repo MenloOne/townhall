@@ -1,7 +1,7 @@
 pragma solidity^0.4.19;
 
-import "./forum.sol";
-import "./redeemer.sol";
+import "./Forum.sol";
+import "./Redeemer.sol";
 
 contract Lottery is Beneficiary, Sponsored {
     // though ERC20 says tokens *should* revert in transferFrom without allowance
@@ -55,7 +55,7 @@ contract Lottery is Beneficiary, Sponsored {
         require(era() >= epochTimestamp + 1 days);
         epochTimestamp = era();
 
-        uint256[5] memory winners; 
+        uint256[5] memory winners;
         int256[5] memory topVotes;
         // get top 5 posts
         for (uint256 i = epochCurrent; i --> epochPrior;) {
