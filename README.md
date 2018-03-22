@@ -97,16 +97,56 @@ You can obtain the deployed contracts addresses with `yarn run truffle network`:
 
 ## Staging and Testnet
 
-### Rinkeby
+### Rinkeby & Mist
 
-  * AppTokenMock: [0xc572a47400dd961cae55105b45a9f50c855d1157](https://rinkeby.etherscan.io/address/0xc572a47400dd961cae55105b45a9f50c855d1157)
-  * Forum: [0x987b79850cac18f37707460e45954c457609e237](https://rinkeby.etherscan.io/address/0x987b79850cac18f37707460e45954c457609e237)
-  * Lottery: [0xc055284e9b03bb134ac59153e271706301bba969](https://rinkeby.etherscan.io/address/0xc055284e9b03bb134ac59153e271706301bba969)
+The [Mist](https://github.com/ethereum/mist/releases) browser can be used to test the Rinkeby testnet.
+
+Mist uses [Geth](https://github.com/ethereum/go-ethereum) underneath:
+
+        brew install geth
+
+Run Geth against Rinkeby with the Apis needed by Truffle:
+
+        geth --rinkeby --rpc --rpcapi db,eth,net,web3,personal --rpccorsdomain http://localhost:3000
+
+Now, run Mist against your local instance of Geth:
+
+        /Applications/Mist.app/Contents/MacOS/Mist --rpc http://127.0.0.1:8545
+
+**Wait for the blocks to sync** , (go for a walk and enjoy the sunshine).
+
+After the blocks sycn, note your account hash in the Mist Wallet, you'll need it later.
+
+Close Mist, Stop Geth.
+
+Now, run Geth with the account you noted above unlocked:
+
+        geth --rinkeby --rpc --rpcapi db,eth,net,web3,personal --unlock="0x4B71d4020a69902E6cB1d9a387a03cF0a839d33b" --rpccorsdomain http://localhost:3000
+
+Run Mist again:
+
+        /Applications/Mist.app/Contents/MacOS/Mist --rpc http://127.0.0.1:8545
+
+Now you are ready to deploy contracts and test:
+
+        yarn run truffle deploy --network rinkeby
+
+Go to the faucet to get some free Ether: [Rinkeby Faucet](https://faucet.rinkeby.io/)
+
+Give your Mist account some TK/MET tokens:
+
+        yarn run truffle console --network rinkeby
+        Token.deployed().then(i => i.transfer('0x00000000000', 100000) )
+
+Run the Message Board front-end and browse to [http://localhost:3000](http://localhost:3000)
+(this should be a staging server eventually) in Mist.
+
 
 ### Kovan
 
-...
+TBD
 
+        parity --chain kovan
 
 ## Production and Mainnet
 
