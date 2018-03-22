@@ -69,11 +69,44 @@ class MessageBoardView extends Component {
     );
   }
 
+  updateBalance(accountDetails) {
+    this.setState({accountDetails: accountDetails});
+  }
+
+  renderAccountDetails() {
+    if(!this.state.accountDetails) { return; }
+
+    return (
+      <div>{this.state.accountDetails.account} ({this.state.accountDetails.balance} MET)</div>
+    )
+  }
+
+  renderAuthenticatedActions = () => {
+    return (
+      <React.Fragment>
+        {this.renderCreateMessage()}
+        {this.renderAccountDetails()}
+      </React.Fragment>
+    )
+  }
+
+  renderUnauthenticatedActions() {
+    return (
+      <div>
+        Not connected to Ethereum. Use <a href="https://metamask.io/">Metamask</a>{' '}
+        or <a href="https://github.com/ethereum/mist/releases">Mist</a> to connect
+        to Ethereum.
+      </div>
+    )
+  }
+
   render() {
+    let actions = this.state.accountDetails ? this.renderAuthenticatedActions : this.renderUnauthenticatedActions
+
     return (
       <div className="MessageBoardView">
         {this.renderMessages()}
-        {this.renderCreateMessage()}
+        {actions()}
       </div>
     );
   }
