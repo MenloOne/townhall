@@ -1,8 +1,6 @@
 pragma solidity^0.4.19;
 
-import "erc20/erc20.sol";
-
-import "./Sponsored.sol";
+import "./sponsored.sol";
 
 interface Beneficiary {
     function onPost(address _poster) external;
@@ -14,7 +12,7 @@ contract ForumEvents {
     // a parent of 0x0 indicates root topic
     // by convention, the bytes32 is a keccak-256 content hash
     // the multihash prefix for this is 1b,20
-    event Topic(uint256 _parent, bytes32 contentHash);
+    event Topic(bytes32 _parentHash, bytes32 contentHash);
 }
 
 contract Forum is ForumEvents {
@@ -40,13 +38,13 @@ contract Forum is ForumEvents {
         beneficiary = _beneficiary;
     }
 
-    function post(uint256 _parent, bytes32 _contentHash) external {
-        Topic(_parent, _contentHash);
+    function post(bytes32 _parentHash, bytes32 _contentHash) external {
+        Topic(_parentHash, _contentHash);
         beneficiary.onPost(msg.sender);
     }
 
-    function postAndUpvote(uint256 _parent, bytes32 _contentHash) external {
-        Topic(_parent, _contentHash);
+    function postAndUpvote(bytes32 _parentHash, bytes32 _contentHash) external {
+        Topic(_parentHash, _contentHash);
         beneficiary.onPostUpvote(msg.sender);
     }
 }
