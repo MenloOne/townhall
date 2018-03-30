@@ -19,6 +19,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "shipit-cli": "^4.0.2",
+    "shipit-deploy": "^4.0.2",
     "truffle": "^4.1.3"
   }
 }
