@@ -68,6 +68,7 @@ contract AppToken is AppTokenEvents,PausableToken {
         Board(trustee1);
         Board(trustee2);
         Board(trustee3);
+        totalSupply = 100000000000000000000000000;
     }
 
     function installed(address _app) public view returns (bool) {
