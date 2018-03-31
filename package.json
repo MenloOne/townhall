@@ -1,0 +1,25 @@
+{
+  "name": "menloone_townhall",
+  "url" : "https://menlo.one",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "buffer": "^5.1.0",
+    "ipfs": "^0.28.2",
+    "ipfs-api": "^18.1.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.1",
+    "truffle-contract": "^3.0.4",
+    "web3": "^1.0.0-beta.33"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "truffle": "^4.1.3"
+  }
+}
