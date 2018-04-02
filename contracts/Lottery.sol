@@ -1,12 +1,13 @@
 pragma solidity^0.4.19;
 
-import "./Forum.sol";
-import "./Redeemer.sol";
+import "./AppToken.sol";
+import "./forum.sol";
+import "./redeemer.sol";
 
 contract Lottery is Beneficiary, Sponsored {
     // though ERC20 says tokens *should* revert in transferFrom without allowance
     // this token *must* revert
-    ERC20 public token;
+    AppToken public token;
     Forum public forum;
     address public owner;
     uint256 public epochTimestamp;
@@ -26,7 +27,7 @@ contract Lottery is Beneficiary, Sponsored {
     uint256 public rewardPool;
     address[5] public payouts;
 
-    function Lottery(ERC20 _token, Forum _forum) public {
+    function Lottery(AppToken _token, Forum _forum) public {
         token = _token;
         forum = _forum;
         owner = msg.sender;
@@ -42,7 +43,7 @@ contract Lottery is Beneficiary, Sponsored {
         _;
     }
     modifier transfersToken(address _voter) {
-        token.transferFrom(_voter, this, postCost);
+        token.appTransfer(_voter, this, postCost);
         _;
     }
     function upvote(uint256 _offset) external sponsored vote(msg.sender, _offset, 1) transfersToken(msg.sender) {
@@ -55,7 +56,7 @@ contract Lottery is Beneficiary, Sponsored {
         require(era() >= epochTimestamp + 1 days);
         epochTimestamp = era();
 
-        uint256[5] memory winners;
+        uint256[5] memory winners; 
         int256[5] memory topVotes;
         // get top 5 posts
         for (uint256 i = epochCurrent; i --> epochPrior;) {
@@ -159,21 +160,21 @@ contract Lottery is Beneficiary, Sponsored {
     function setNextPostCost(uint256 _nextPostCost) external onlyOwner {
         nextPostCost = _nextPostCost;
     }
-    function redeem(Redeemer _redeemer) external onlyOwner returns (ERC20) {
+    function redeem(Redeemer _redeemer) external onlyOwner returns (AppToken) {
         require(_redeemer.from() == token);
 
         token.approve(_redeemer, token.balanceOf(this));
         _redeemer.redeem();
-        ERC20 to = _redeemer.to();
+        AppToken to = _redeemer.to();
         token = to;
         return to;
     }
-    function undo(Redeemer _redeemer) external onlyOwner returns (ERC20) {
+    function undo(Redeemer _redeemer) external onlyOwner returns (AppToken) {
         require(_redeemer.to() == token);
 
         token.approve(_redeemer, token.balanceOf(this));
         _redeemer.undo();
-        ERC20 from = _redeemer.from();
+        AppToken from = _redeemer.from();
         token = from;
         return from;
     }
