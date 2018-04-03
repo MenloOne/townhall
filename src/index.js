@@ -1,31 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import MessageBoardApp from 'MessageBoardApp'
 import JavascriptIPFSStorage from 'storage/JavascriptIPFSStorage';
 import RemoteIPFSStorage from 'storage/RemoteIPFSStorage';
 import EthereumForum from 'contracts/EthereumForum';
 import MessageBoardGraph from 'storage/MessageBoardGraph';
-import MessageBoardView from 'components/MessageBoardView';
+import Client from './client';
+import App from 'components/App';
 import registerServiceWorker from './registerServiceWorker';
+import './index.css';
 
-window.addEventListener('load', function() {
-  let menloStorage = new RemoteIPFSStorage();
-  let localStorage = new JavascriptIPFSStorage();
-  localStorage.connectPeer(menloStorage);
-  let forum = new EthereumForum();
-  let graph = new MessageBoardGraph();
-  let view = ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
-  let app = new MessageBoardApp({
-    view: view,
-    localStorage: localStorage,
-    graph: graph,
-    menloStorage: menloStorage,
-    forum: forum,
-  });
+const remoteStorage = new RemoteIPFSStorage();
+const localStorage = new JavascriptIPFSStorage();
+localStorage.connectPeer(remoteStorage);
 
-  app.viewMessages();
-  app.showBalance();
+const forum = new EthereumForum();
+const graph = new MessageBoardGraph();
+graph.addNode('0x0');
 
-  registerServiceWorker();
-});
+const client = new Client(graph, forum, localStorage, remoteStorage);
+ReactDOM.render(<App client={client} />, document.getElementById('root'));
+
+registerServiceWorker();
