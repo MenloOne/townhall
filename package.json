@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bl": "^1.2.2",
     "buffer": "^5.1.0",
     "cids": "^0.5.3",
     "ipfs": "^0.28.2",
