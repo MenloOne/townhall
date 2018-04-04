@@ -13,12 +13,13 @@ class MessageBoardApp {
     this.forum = props.forum;
     this.graph = props.graph;
 
-    this.graph.addNode('0');
+    this.graph.addNode('0x0');
+
     this.view.setOnCreateMessage(this.createMessage);
   }
 
   viewMessages = async () => {
-    let messageIDs = this.graph.children('0');
+    let messageIDs = this.graph.children('0x0');
     let messages = await Promise.all(messageIDs.map((mid) => this.localStorage.findMessage(mid)));
     this.view.setMessages(messages);
   }
@@ -38,7 +39,7 @@ class MessageBoardApp {
   createMessage = async (messageBody) => {
     let message = {
       version: "CONTRACT_VERSION",
-      parent: "0",
+      parent: "0x0",
       body: messageBody
     };
 

@@ -18,7 +18,7 @@ describe('MessageBoardApp', () => {
         app.createMessage("test message").then(() => {
           expect(localStorage.createMessage).toHaveBeenCalledWith({
             version: "CONTRACT_VERSION",
-            parent: "0",
+            parent: "0x0",
             body: "test message"
           });
           done();
@@ -27,14 +27,14 @@ describe('MessageBoardApp', () => {
 
       it('posts the message on the forum using the IPFS hash and the root parent', done => {
         app.createMessage("test message").then(() => {
-          expect(forum.post).toHaveBeenCalledWith('localHash', '0');
+          expect(forum.post).toHaveBeenCalledWith('localHash', '0x0');
           done();
         });
       });
 
       it('adds the message hash to the graph with the root parent', done => {
         app.createMessage("test message").then(() => {
-          expect(graph.addNode).toHaveBeenCalledWith('localHash', '0');
+          expect(graph.addNode).toHaveBeenCalledWith('localHash', '0x0');
           done();
         });
       })
