@@ -1,5 +1,8 @@
 import multihash from 'multihashes';
+import multihashing from 'multihashing-async';
 import CID from 'cids';
+import ipldDagCbor from 'ipld-dag-cbor';
+import waterfall  from 'async/waterfall';
 
 let SolidityHash = {};
 
@@ -16,6 +19,14 @@ SolidityHash.toCID = (hash) => {
 
   let encodedHash = multihash.encode(multihash.fromHexString(theHash), 'keccak-256');
   return new CID(1, 'dag-cbor', encodedHash).toBaseEncodedString();
+}
+
+SolidityHash.nodeToCID = (node, callback) => {
+  return waterfall([
+    (cb) => ipldDagCbor.util.serialize(node, cb),
+    (serialized, cb) => multihashing(serialized, 'keccak-256', cb),
+    (mh, cb) => cb(null, new CID(1, 'dag-cbor', mh))
+  ], callback)
 }
 
 export default SolidityHash;

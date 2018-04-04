@@ -19,4 +19,14 @@ describe('SolidityHash', () => {
       expect(cid).toEqual('zdq6yPVTLJxshnQ28bDfFRKGJViLQ96vRc17oyU4bheRgD6YW')
     })
   });
+
+  describe('nodeToCID(node)', () => {
+    it('returns a CID using keccak-256 algorithm', (done) => {
+      let node = { name: "forum root" }
+      SolidityHash.nodeToCID(node, (err, cid) => {
+        expect(cid.toBaseEncodedString()).toEqual('zdq6yPVTLJxshnQ28bDfFRKGJViLQ96vRc17oyU4bheRgD6YW')
+        done()
+      })
+    })
+  })
 })
