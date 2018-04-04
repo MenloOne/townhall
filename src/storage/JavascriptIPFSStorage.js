@@ -1,4 +1,5 @@
 import IPFS from 'ipfs';
+import HashUtils from 'HashUtils';
 
 class JavascriptIPFSStorage {
   constructor() {
@@ -9,9 +10,11 @@ class JavascriptIPFSStorage {
 
   createMessage(message) {
     return new Promise((resolve, reject) => {
-      this.ipfs.dag.put(message, {format: 'dag-cbor'}, (err, result) => {
-        this.messagesList.push(message);
-        resolve(result.toBaseEncodedString());
+      HashUtils.nodeToCID(message, (cidErr, cid) => {
+        this.ipfs.dag.put(message, {cid: cid}, (putErr, result) => {
+          this.messagesList.push(message);
+          resolve(result.toBaseEncodedString());
+        })
       })
     })
   }

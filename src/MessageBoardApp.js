@@ -1,7 +1,7 @@
 import MessageBoardError from 'MessageBoardError';
 import web3 from 'web3_override';
 import TruffleContract from 'truffle-contract';
-import TokenContract from 'truffle_artifacts/contracts/Token.json';
+import TokenContract from 'truffle_artifacts/contracts/AppToken.json';
 
 let Token = TruffleContract(TokenContract);
 
@@ -10,15 +10,16 @@ class MessageBoardApp {
     this.view = props.view;
     this.localStorage = props.localStorage;
     this.menloStorage = props.menloStorage;
-    this.contract = props.contract;
+    this.forum = props.forum;
     this.graph = props.graph;
 
-    this.graph.addNode('0');
+    this.graph.addNode('0x0');
+
     this.view.setOnCreateMessage(this.createMessage);
   }
 
   viewMessages = async () => {
-    let messageIDs = this.graph.children('0');
+    let messageIDs = this.graph.children('0x0');
     let messages = await Promise.all(messageIDs.map((mid) => this.localStorage.findMessage(mid)));
     this.view.setMessages(messages);
   }
@@ -38,14 +39,14 @@ class MessageBoardApp {
   createMessage = async (messageBody) => {
     let message = {
       version: "CONTRACT_VERSION",
-      parent: "0",
+      parent: "0x0",
       body: messageBody
     };
 
     try {
       let messageHash = await this.localStorage.createMessage(message)
         .catch(e => { throw new MessageBoardError('An error occurred saving the message to your local IPFS.') });
-      await this.contract.createMessage(messageHash, message.parent)
+      await this.forum.post(messageHash, message.parent)
         .catch(e => { throw new MessageBoardError('An error occurred verifying the message.') });
       this.graph.addNode(messageHash, message.parent)
       await this.menloStorage.pin(messageHash)
