@@ -4,7 +4,7 @@ import './index.css';
 import MessageBoardApp from 'MessageBoardApp'
 import JavascriptIPFSStorage from 'storage/JavascriptIPFSStorage';
 import RemoteIPFSStorage from 'storage/RemoteIPFSStorage';
-import MemoryForum from 'contracts/MemoryForum';
+import EthereumForum from 'contracts/EthereumForum';
 import MessageBoardGraph from 'storage/MessageBoardGraph';
 import MessageBoardView from 'components/MessageBoardView';
 import registerServiceWorker from './registerServiceWorker';
@@ -13,7 +13,7 @@ window.addEventListener('load', function() {
   let menloStorage = new RemoteIPFSStorage();
   let localStorage = new JavascriptIPFSStorage();
   localStorage.connectPeer(menloStorage);
-  let forum = new MemoryForum();
+  let forum = new EthereumForum();
   let graph = new MessageBoardGraph();
   let view = ReactDOM.render(<MessageBoardView />, document.getElementById('root'));
   let app = new MessageBoardApp({
