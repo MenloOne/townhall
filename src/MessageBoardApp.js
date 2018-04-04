@@ -1,7 +1,7 @@
 import MessageBoardError from 'MessageBoardError';
 import web3 from 'web3_override';
 import TruffleContract from 'truffle-contract';
-import TokenContract from 'truffle_artifacts/contracts/Token.json';
+import TokenContract from 'truffle_artifacts/contracts/AppToken.json';
 
 let Token = TruffleContract(TokenContract);
 
