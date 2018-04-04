@@ -1,0 +1,17 @@
+.message .text {
+  font-size: 1.2em;
+}
+
+.message .actions a {
+  font-size: .75em;
+  color: #989898;
+  cursor: pointer;
+}
+
+.parent {
+  padding-bottom: 1em;
+}
+
+.error {
+  color: red;
+}

@@ -4,14 +4,17 @@ class MessageForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { message: '' };
+    this.state = { message: '', disabled: false };
   }
 
   onSubmit(event) {
     event.preventDefault();
+    this.setState({ disabled: true });
 
     this.props.onSubmit(this.state.message)
-      .then(() => this.setState({ message: '' }));
+      .then(() => {
+        if (this.props.type !== "Response") this.setState({ message: '', disabled: false });
+      });
   }
 
   onChange(event) {
@@ -22,11 +25,11 @@ class MessageForm extends React.Component {
     return (
       <form onSubmit={this.onSubmit.bind(this)}>
         <label>
-          Message:
+          {this.props.type ? `${this.props.type}: ` : "Message: "}
           <input type="text" value={this.state.message} onChange={this.onChange.bind(this)} />
-          <input type="submit" value="Send" />
+          <input type="submit" value="Send" disabled={this.state.disabled} />
         </label>
-        {this.props.error}
+        {this.props.error && <p className="error">{this.props.error}</p>}
       </form>
     );
   }

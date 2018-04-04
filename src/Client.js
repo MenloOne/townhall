@@ -1,0 +1,60 @@
+import web3 from 'web3_override';
+import truffleContract from 'truffle-contract';
+import tokenContract from 'truffle_artifacts/contracts/AppToken.json';
+import MessageBoardError from 'MessageBoardError';
+
+class Client {
+  constructor(graph, forum, localStorage, remoteStorage) {
+    this.graph = graph;
+    this.forum = forum;
+    this.localStorage = localStorage;
+    this.remoteStorage = remoteStorage;
+    this.token = truffleContract(tokenContract);
+  }
+
+  getAccountDetails() {
+    if (!web3) return Promise.reject();
+
+    this.token.setProvider(web3.currentProvider);
+
+    return new Promise((resolve, reject) => {
+      web3.eth.getAccounts((err, result) => {
+        const account = result[0];
+        if (!account) {
+          return reject();
+        }
+
+        this.token.deployed()
+          .then(i => i.balanceOf(account))
+          .then(balance => resolve({ account, balance }));
+      });
+    });
+  }
+
+  getLocalMessages(nodeID) {
+    const messageIDs = this.graph.children(nodeID || "0x0");
+
+    return Promise.all(messageIDs.map(id => this.localStorage.findMessage(id)));
+  }
+
+  async createMessage(messageBody, parentHash) {
+    const message = {
+      version: "CONTRACT_VERSION",
+      parent: parentHash || "0x0",
+      body: messageBody
+    };
+
+    const messageHash = await this.localStorage.createMessage(message)
+      .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to your local IPFS.')));
+
+    await this.forum.post(messageHash, message.parent)
+      .catch(() => Promise.reject(new MessageBoardError('An error occurred verifying the message.')));
+
+    this.graph.addNode(messageHash, message.parent);
+
+    return this.remoteStorage.pin(messageHash)
+      .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to Menlo IPFS.')));
+  }
+}
+
+export default Client;
