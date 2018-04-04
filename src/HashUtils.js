@@ -4,13 +4,13 @@ import CID from 'cids';
 import ipldDagCbor from 'ipld-dag-cbor';
 import waterfall  from 'async/waterfall';
 
-let SolidityHash = {};
+let thisExport = {};
 
-SolidityHash.fromCID = (cid) => {
+thisExport.cidToSolidityHash = (cid) => {
   return '0x' + multihash.decode(new CID(cid).multihash).digest.toString('hex');
 }
 
-SolidityHash.toCID = (hash) => {
+thisExport.solidityHashToCid = (hash) => {
   let theHash = hash;
 
   if(hash.length === 66) {
@@ -21,7 +21,7 @@ SolidityHash.toCID = (hash) => {
   return new CID(1, 'dag-cbor', encodedHash).toBaseEncodedString();
 }
 
-SolidityHash.nodeToCID = (node, callback) => {
+thisExport.nodeToCID = (node, callback) => {
   return waterfall([
     (cb) => ipldDagCbor.util.serialize(node, cb),
     (serialized, cb) => multihashing(serialized, 'keccak-256', cb),
@@ -29,4 +29,4 @@ SolidityHash.nodeToCID = (node, callback) => {
   ], callback)
 }
 
-export default SolidityHash;
+export default thisExport;

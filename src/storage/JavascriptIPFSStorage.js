@@ -1,5 +1,5 @@
 import IPFS from 'ipfs';
-import SolidityHash from 'SolidityHash';
+import HashUtils from 'HashUtils';
 
 class JavascriptIPFSStorage {
   constructor() {
@@ -10,8 +10,8 @@ class JavascriptIPFSStorage {
 
   createMessage(message) {
     return new Promise((resolve, reject) => {
-      SolidityHash.nodeToCID(message, (err1, cid) => {
-        this.ipfs.dag.put(message, {cid: cid}, (err2, result) => {
+      HashUtils.nodeToCID(message, (cidErr, cid) => {
+        this.ipfs.dag.put(message, {cid: cid}, (putErr, result) => {
           this.messagesList.push(message);
           resolve(result.toBaseEncodedString());
         })
