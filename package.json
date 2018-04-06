@@ -20,11 +20,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "create-accounts": "node scripts/create-accounts.js"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "dotenv": "^5.0.1",
     "shipit-cli": "^4.0.2",
     "shipit-deploy": "^4.0.2",
     "truffle": "^4.1.5"
