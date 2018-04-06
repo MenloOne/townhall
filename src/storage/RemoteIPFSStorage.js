@@ -8,7 +8,9 @@ class RemoteIPFSStorage {
 
   pin(hash) {
     return this.connection.pin.add(hash).then(result => {
-      return result && result.length > 0;
+      if (result && result.length > 0) return hash;
+
+      return Promise.reject();
     })
   }
 }

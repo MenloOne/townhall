@@ -1,6 +1,8 @@
 class MessageBoardGraph {
   constructor() {
     this.nodes = {}
+
+    this.addNode('0x0');
   }
 
   children(nodeID) {
