@@ -6,7 +6,12 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showReplyForm: false, children: [] };
+    this.state = { showReplyForm: false, children: [], votes: null };
+  }
+
+  componentDidMount() {
+    this.props.client.getVotes(this.props.hash)
+      .then(votes => this.setState({votes: votes.toString()}))
   }
 
   showReplyForm() {
@@ -30,6 +35,7 @@ class Message extends React.Component {
     return (
         <div className={`message ${this.props.type}`}>
           <div className="text">{this.props.body}</div>
+          {this.state.votes && <div className="votes">votes: {this.state.votes}</div>}
           <div className="actions">
             {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
           </div>
