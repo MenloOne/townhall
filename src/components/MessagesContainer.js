@@ -18,9 +18,8 @@ class MessagesContainer extends React.Component {
     return this.props.client.createMessage(messageBody)
       .then(messageHash => {
         const message = { hash: messageHash, body: messageBody };
-        this.setState({ error: null, messages: [...this.state.messages, message] });
-      })
-      .catch(error => this.setState({ error: error.message }));
+        this.setState({ messages: [...this.state.messages, message] });
+      });
   }
 
   renderMessages() {
@@ -40,7 +39,7 @@ class MessagesContainer extends React.Component {
     return (
         <React.Fragment>
           <div>{this.renderMessages()}</div>
-          <MessageForm onSubmit={this.onFormSubmit.bind(this)} error={this.state.error} />
+          <MessageForm onSubmit={this.onFormSubmit.bind(this)} />
         </React.Fragment>
     );
   }

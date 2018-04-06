@@ -22,9 +22,8 @@ class Message extends React.Component {
               type={"child"}
               body={messageBody} />);
 
-        this.setState({ children: [...this.state.children, child], error: null, showReplyForm: false });
-      })
-      .catch(error => this.setState({ error: error.message }));
+        this.setState({ children: [...this.state.children, child], showReplyForm: false });
+      });
   }
 
   render() {
@@ -32,11 +31,10 @@ class Message extends React.Component {
         <div className={`message ${this.props.type}`}>
           <div className="text">{this.props.body}</div>
           <div className="actions">
-            {this.props.type === "parent" && <a onClick={this.showReplyForm.bind(this)}>reply</a>}
+            {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
           </div>
           {this.state.showReplyForm &&
             <MessageForm id={this.props.hash} type={"Response"} onSubmit={(message) => this.reply(message)} />}
-          {this.state.error}
           {this.state.children}
         </div>
     );
