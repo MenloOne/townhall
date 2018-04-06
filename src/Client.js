@@ -60,6 +60,14 @@ class Client {
   getVotes(messageHash) {
     return this.lottery.votes(messageHash);
   }
+
+  upvote(messageHash) {
+    return this.lottery.upvote(messageHash);
+  }
+
+  downvote(messageHash) {
+    return this.lottery.downvote(messageHash);
+  }
 }
 
 export default Client;

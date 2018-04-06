@@ -4,14 +4,17 @@ import Message from './Message';
 import MessageForm from './MessageForm';
 
 describe('Message', () => {
+  let message, client;
+
+  beforeEach(() => {
+    client = {
+      createMessage: jest.fn(() => Promise.resolve('newMessageHash')),
+      getVotes: jest.fn(() => Promise.resolve(1))
+    };
+  })
+
   describe('parent message', () => {
-    let message, client;
-
     beforeEach(() => {
-      client = {
-        createMessage: jest.fn(() => Promise.resolve('newMessageHash'))
-      };
-
       message = shallow(<Message type={'parent'}
           client={client}
           body={'someMessageBody'}
@@ -52,10 +55,9 @@ describe('Message', () => {
   });
 
   describe('child message', () => {
-    let message;
-
     beforeEach(() => {
       message = shallow(<Message type={'child'}
+          client={client}
           body={'someMessageBody'}
           hash={'childHash'} />);
     });
