@@ -56,6 +56,10 @@ class Client {
     return this.remoteStorage.pin(messageHash)
       .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to Menlo IPFS.')));
   }
+
+  getVotes(messageHash) {
+    return this.lottery.votes(messageHash);
+  }
 }
 
 export default Client;
