@@ -147,8 +147,14 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 
 ### Testing
 
+For testing the town hall dapp:
+
       yarn test
 
+For testing the town hall contracts:
+
+      dapp update
+      dapp test
 
 ### Deployment
 
