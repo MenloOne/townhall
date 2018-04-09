@@ -1,7 +1,5 @@
 # Menlo Town Hall
 
-The Town Hall uses....
-
 ## Development
 
 
@@ -16,28 +14,36 @@ We assume `brew` for package management to install `IPFS` and other dependencies
 
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
+#### IPFS
+
+The Town Hall uses [IPFS](https://ipfs.io/) for storage of messages.
+
+Menlo specific setup of IPFS can be installed and configured via:
+
+        yarn run menlo:setup
+
 #### Metamask
 
-Metamask or Mist should be used for interacting with the townhall dapp.
+Metamask or Mist should be used for interacting with the town hall dapp.
 
-Install Metamask extensions into browser of choice, Chrome or Brave supported: [http://metamask.io](http://metamask.io)
+Install Metamask extensions into your browser of choice, Chrome or Brave supported: [http://metamask.io](http://metamask.io)
 
 #### Import development chain account
 
-Import this private key into MetaMask when using `truffle develop` and `Ganache`:
+Import this private key into MetaMask for use with `truffle develop` and `Ganache`:
 
         388c684f0ba1ef5017716adb5d21a053ea8e90277d0868337519f97bede61418
 
-![import MetaMask](https://www.dropbox.com/s/5wwkrvv7yuzi1h7/MetaMaskImport.png?raw=1)
+
+![import MetaMask](https://www.dropbox.com/s/fqpvmut8cppr36o/MetaMaskImport.png?raw=1)
 
 ### Install app and dependencies
 
 1. Install nvm and node: `brew install nvm && nvm install`
 2. Clone the repo: `git clone git@github.com:vulcanize/message_board_reactjs.git`
 3. Install dependencies: `cd message_board_reactjs && nvm use && yarn install`
-4. Setup Menlo system dependencies such as IPFS: `yarn run menlo:setup`
 
-### Run the application for development
+### Run the application
 
 1. Run a local dev blockchain in a separate window: `yarn run truffle develop`
 2. Run IPFS daemon in a separate window: `ipfs daemon`
@@ -59,51 +65,85 @@ You can obtain the deployed contracts addresses with `yarn run truffle network`:
 
 #### Ganache
 
-For a light and easy to use private chain with a visual and cli interface,
+For a light, easy to use private chain with a visual and cli interface,
 try [Ganache](http://truffleframework.com/ganache/).
 
 You can deploy and test using network ganache:
 
     yarn run truffle deploy --network ganache
 
-Note: Ganache is intended to be used for transitory use, once you shutdown Ganache or truffle develop
-you will have to redeploy the contracts and any transactions such as token balances.
+**Note**: Ganache and truffle develop are transitory. Once you shut them down,
+you will have to redeploy the contracts and redo any needed transactions.
 
 ## Integration
 
-For a persistent local testing environment to test integration before deploying to
+For a persistent local testing environment to test before deploying to
 testnet or mainnet, use a Dev chain with Parity or Geth.
+
+You can set the following environment variables in your local `.env` file to
+run against a local dev chain if you already have Parity or Geth configured or set
+with needed accounts:
+
+    - MENLO_TENET_1: Address for first tenet account.
+    - MENLO_TENET_2: Address for second tenet account.
+    - MENLO_TENET_3: Address for third tenet account.
+    - MENLO_POSTER: Address for the account used to interact with town hall.
 
 ### Parity
 
-To run a private dev chain with Parity, first run a dev chain, setup Menlo accounts, and then
-run contract deployment.
+To run a private dev chain with Parity, first run a dev chain, setup Menlo accounts, and
+then deploy contracts.
 
-You need to unlock your dev account to be able to run Truffle migrations easily.
-Assuming a default Parity setup, the initial dev account with Ether issue is static.
-Pass the account address and a password when running parity, the default dev account password is a blank string.
-That method is demonstrated below:
+#### Install Parity
+
+Installing Parity:
 
         brew install parity
-        parity --config dev --unlock 0x00a329c0648769A73afAc7F9381E08FB43dBEA72 --password "" --force-ui  --jsonrpc-cors all -lrpc=trace --jsonrpc-apis web3,eth,net,personal,parity,parity_set,traces,rpc,parity_accounts  --no-persistent-txqueue
 
-Setup the needed Menlo accounts:
+
+#### Run unlocked dev chain
+
+Assuming a default Parity setup, the initial dev account address is static:
+
+       0x00a329c0648769A73afAc7F9381E08FB43dBEA72
+
+You need to unlock your dev account to be able to run Truffle migrations easily.
+The following script runs parity with an unlocked dev account, it will need
+to be modified if you've changed the default dev account:
+
+        ./scripts/parity-unlocked-dev.sh
+
+#### Set up Menlo accounts
+
+Create the needed Menlo accounts:
 
         yarn run truffle menlo:create-integration-accounts
 
 After running the account creation, a set of accounts will be displayed to
-add to your .env file.
+add to your `.env` file.
+
+Add MENLO_TENET_1, MENLO_TENET_2, MENLO_TENET_3, and MENLO_POSTER to you `.env`.
+
+#### Deploy Contracts
 
 Once you add the environment variables to your account, rerun parity with the
 helper script:
 
-        yarn run menlo:start-parity-dev-chain
+        yarn run menlo:parity-dev-chain
 
 Now deploy the contracts, use the `integration` network defined in `truffle.js` when using parity.
 
         yarn run truffle deploy --network integration
 
+Your contracts will live between parity dev runs, you can check the contracts addresses to watch with `truffle network`.
+
+Browse [http://localhost:8180](http://localhost:8180) to interact with the Parity wallet.
+
 Parity has a lot of config and features: [Read the effin manual](https://wiki.parity.io/Private-development-chain)
+
+#### Subsequent runs
+
+        yarn run menlo:parity-dev-chain
 
 ### Testing
 
@@ -114,12 +154,12 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 
 Set the following environment variables:
 
-          1. MENLO_DEPLOYMENT_STAGING_KEY:
-          2. MENLO_DEPLOYMENT_STAGING_SERVER:
+          1. MENLO_DEPLOYMENT_KEY:
+          2. MENLO_DEPLOYMENT_SERVER:
 
 Deploy to server using `shipit`:
 
-      yarn run shipit staging deploy
+      yarn run menlo:deploy
 
 ## Staging and Testnet
 

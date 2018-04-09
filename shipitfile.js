@@ -1,5 +1,8 @@
 require('dotenv').config()
 
+var deployment_key = process.env.MENLO_DEPLOYMENT_KEY
+var deployment_server = process.env.MENLO_DEPLOYMENT_SERVER
+
 module.exports = shipit => {
   require('shipit-deploy')(shipit)
 
@@ -9,8 +12,8 @@ module.exports = shipit => {
       repositoryUrl: 'https://github.com/vulcanize/message_board_reactjs.git',
     },
     staging: {
-      key:     process.env.MENLO_DEPLOYMENT_STAGING_KEY,
-      servers: process.env.MENLO_DEPLOYMENT_STAGING_SERVER,
+      key:     deployment_key,
+      servers: deployment_server,
     },
   })
 }

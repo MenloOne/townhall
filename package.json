@@ -21,8 +21,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "menlo:deploy": "yarn run shipit staging deploy",
     "menlo:create-integration-accounts": "node scripts/create-accounts.js",
-    "menlo:setup": "./scripts/setup-menlo.sh"
+    "menlo:setup": "./scripts/setup-menlo.sh",
+    "menlo:parity-dev-chain": "./scripts/menlo-parity-start.sh"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
