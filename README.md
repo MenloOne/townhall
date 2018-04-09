@@ -1,86 +1,58 @@
-# Message Board
+# Menlo Town Hall
 
 ## Development
 
-### Set up IPFS
 
-1. Install IPFS: `brew install ipfs`
-2. Run the daemon: `ipfs daemon`
-3. Visit `http://localhost:5001/webui` in the browser (Chrome works, Safari doesn't)
+To develop and run the town hall locally, install the following prerequisites and
+dependencies before running the app.
 
-#### Add the Websocket listener
+### Prerequisites
 
-Add the following entry to your `Swarm` array in `~.ipfs/config`: `/ip4/127.0.0.1/tcp/9999/ws`.
-Now, it should look like this:
+#### Brew
 
-```
-  "Addresses": {
-    "API": "/ip4/127.0.0.1/tcp/5001",
-    "Announce": [],
-    "Gateway": "/ip4/127.0.0.1/tcp/8080",
-    "NoAnnounce": [],
-    "Swarm": [
-      "/ip4/0.0.0.0/tcp/4001",
-      "/ip6/::/tcp/4001",
-      "/ip4/127.0.0.1/tcp/9999/ws"
-    ]
-  }
-```
+We assume `brew` for package management to install `IPFS` and other dependencies:
 
-Restart the ipfs daemon
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-#### (Temporarily?) disable CORS
+#### IPFS
 
-From [js-ipfs-api documentation](https://github.com/ipfs/js-ipfs-api/tree/master/examples/bundle-browserify#setup):
+The Town Hall uses [IPFS](https://ipfs.io/) for storage of messages.
 
-```
-ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
-ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
-```
+Menlo specific setup of IPFS can be installed and configured via:
 
-Restart the daemon.
+        yarn run menlo:setup
 
-### Set up Ethereum locally
+#### Metamask
 
-#### Ganache
+Metamask or Mist should be used for interacting with the town hall dapp.
 
-For a light and easy to use private chain, try [Ganache](http://truffleframework.com/ganache/).
+Install Metamask extensions into your browser of choice, Chrome or Brave supported: [http://metamask.io](http://metamask.io)
 
-Note: Ganache is intended to be used for transitory use, once you shutdown Ganache you will
-have to redeploy the contracts and any transactions such as token balances.
+#### Import development chain account
 
-For a more consistent, local testing environment, use Parity.
+Import this private key into MetaMask for use with `truffle develop` and `Ganache`:
 
-#### Parity
+        388c684f0ba1ef5017716adb5d21a053ea8e90277d0868337519f97bede61418
 
-Another option, which also enables interacting with the rest of Ethereum, is
-to run a private dev chain with Parity.
 
-You need to unlock your account to be able to run Truffle migrations easily.
-One method is to pass the account address and a password file when running parity,
-that method is demonstrated below.
+![import MetaMask](https://www.dropbox.com/s/fqpvmut8cppr36o/MetaMaskImport.png?raw=1)
 
-You can also call the `personal_unlockAccount` rpc method.
-
-        brew install parity
-        parity --config dev --unlock 0x00a329c0648769A73afAc7F9381E08FB43dBEA72 --password parity.account --force-ui  --jsonrpc-cors all -lrpc=trace --jsonrpc-apis web3,eth,net,personal,parity,parity_set,traces,rpc,parity_accounts  --no-persistent-txqueue
-
-Use the `integration` network defined in `truffle.js` when using parity.
-
-        yarn run truffle deploy --network integration
-
-Parity has a lot of config and features: [Read the effin manual](https://wiki.parity.io/Private-development-chain)
-
-### Install the app
+### Install app and dependencies
 
 1. Install nvm and node: `brew install nvm && nvm install`
 2. Clone the repo: `git clone git@github.com:vulcanize/message_board_reactjs.git`
 3. Install dependencies: `cd message_board_reactjs && nvm use && yarn install`
-4. Run Ganache: GUI or `ganache-cli -p 7545`
-4. Deploy the contracts: `yarn run truffle deploy`
-5. Run the app: `yarn start`
 
-It should open a browser to `http://localhost:3000/`
+### Run the application
+
+1. Run a local dev blockchain in a separate window: `yarn run truffle develop`
+2. Run IPFS daemon in a separate window: `ipfs daemon`
+3. Now, deploy the contracts: `yarn run truffle deploy`
+4. Run the app: `yarn start`
+
+A browser window should open after starting: `http://localhost:3000/`
+
+Ensure you are logged into MetaMask and switch to your imported account.
 
 You can obtain the deployed contracts addresses with `yarn run truffle network`:
 
@@ -91,13 +63,109 @@ You can obtain the deployed contracts addresses with `yarn run truffle network`:
           Token: 0x01c957395029e9accbcb25a6ab72c618252cacf9
 
 
+#### Ganache
+
+For a light, easy to use private chain with a visual and cli interface,
+try [Ganache](http://truffleframework.com/ganache/).
+
+You can deploy and test using network ganache:
+
+    yarn run truffle deploy --network ganache
+
+**Note**: Ganache and truffle develop are transitory. Once you shut them down,
+you will have to redeploy the contracts and redo any needed transactions.
+
+## Integration
+
+For a persistent local testing environment to test before deploying to
+testnet or mainnet, use a Dev chain with Parity or Geth.
+
+You can set the following environment variables in your local `.env` file to
+run against a local dev chain if you already have Parity or Geth configured or set
+with needed accounts:
+
+    - MENLO_TENET_1: Address for first tenet account.
+    - MENLO_TENET_2: Address for second tenet account.
+    - MENLO_TENET_3: Address for third tenet account.
+    - MENLO_POSTER: Address for the account used to interact with town hall.
+
+### Parity
+
+To run a private dev chain with Parity, first run a dev chain, setup Menlo accounts, and
+then deploy contracts.
+
+#### Install Parity
+
+Installing Parity:
+
+        brew install parity
+
+
+#### Run unlocked dev chain
+
+Assuming a default Parity setup, the initial dev account address is static:
+
+       0x00a329c0648769A73afAc7F9381E08FB43dBEA72
+
+You need to unlock your dev account to be able to run Truffle migrations easily.
+The following script runs parity with an unlocked dev account, it will need
+to be modified if you've changed the default dev account:
+
+        ./scripts/parity-unlocked-dev.sh
+
+#### Set up Menlo accounts
+
+Create the needed Menlo accounts:
+
+        yarn run truffle menlo:create-integration-accounts
+
+After running the account creation, a set of accounts will be displayed to
+add to your `.env` file.
+
+Add MENLO_TENET_1, MENLO_TENET_2, MENLO_TENET_3, and MENLO_POSTER to you `.env`.
+
+#### Deploy Contracts
+
+Once you add the environment variables to your account, rerun parity with the
+helper script:
+
+        yarn run menlo:parity-dev-chain
+
+Now deploy the contracts, use the `integration` network defined in `truffle.js` when using parity.
+
+        yarn run truffle deploy --network integration
+
+Your contracts will live between parity dev runs, you can check the contracts addresses to watch with `truffle network`.
+
+Browse [http://localhost:8180](http://localhost:8180) to interact with the Parity wallet.
+
+Parity has a lot of config and features: [Read the effin manual](https://wiki.parity.io/Private-development-chain)
+
+#### Subsequent runs
+
+        yarn run menlo:parity-dev-chain
+
 ### Testing
 
-...
+      yarn test
+
+
+### Deployment
+
+Set the following environment variables:
+
+          1. MENLO_DEPLOYMENT_KEY:
+          2. MENLO_DEPLOYMENT_SERVER:
+
+Deploy to server using `shipit`:
+
+      yarn run menlo:deploy
 
 ## Staging and Testnet
 
 ### Rinkeby & Mist
+
+MetaMask can be used with a Rinkeby account to test against.
 
 The [Mist](https://github.com/ethereum/mist/releases) browser can be used to test the Rinkeby testnet.
 
@@ -136,11 +204,8 @@ Go to the faucet to get some free Ether: [Rinkeby Faucet](https://faucet.rinkeby
 Give your Mist account some TK/MET tokens:
 
         yarn run truffle console --network rinkeby
-        Token.deployed().then(i => i.transfer('0x00000000000', 100000) )
 
-Run the Message Board front-end and browse to [http://localhost:3000](http://localhost:3000)
-(this should be a staging server eventually) in Mist.
-
+Run the Town Hall and browse in Mist to [http://localhost:3000](http://localhost:3000).
 
 ### Kovan
 
