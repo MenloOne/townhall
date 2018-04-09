@@ -122,7 +122,7 @@ Create the needed Menlo accounts:
 After running the account creation, a set of accounts will be displayed to
 add to your `.env` file.
 
-Add MENLO_TENET_1, MENLO_TENET_2, MENLO_TENET_3, and MENLO_POSTER to you `.env`.
+Add `MENLO_TENET_1`, `MENLO_TENET_2`, `MENLO_TENET_3`, and `MENLO_POSTER` to you `.env`.
 
 #### Deploy Contracts
 
