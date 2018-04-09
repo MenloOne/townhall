@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "menlo:create-accounts": "node scripts/create-accounts.js"
+    "menlo:create-integration-accounts": "node scripts/create-accounts.js",
+    "menlo:setup": "./scripts/setup-menlo.sh"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
