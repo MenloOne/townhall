@@ -4,9 +4,10 @@ import tokenContract from 'truffle_artifacts/contracts/AppToken.json';
 import MessageBoardError from 'MessageBoardError';
 
 class Client {
-  constructor(graph, forum, localStorage, remoteStorage) {
+  constructor(graph, forum, lottery, localStorage, remoteStorage) {
     this.graph = graph;
     this.forum = forum;
+    this.lottery = lottery;
     this.localStorage = localStorage;
     this.remoteStorage = remoteStorage;
     this.token = truffleContract(tokenContract);
@@ -54,6 +55,18 @@ class Client {
 
     return this.remoteStorage.pin(messageHash)
       .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to Menlo IPFS.')));
+  }
+
+  getVotes(messageHash) {
+    return this.lottery.votes(messageHash);
+  }
+
+  upvote(messageHash) {
+    return this.lottery.upvote(messageHash);
+  }
+
+  downvote(messageHash) {
+    return this.lottery.downvote(messageHash);
   }
 }
 
