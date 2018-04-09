@@ -1,12 +1,24 @@
-# Message Board
+# Menlo Town Hall
 
 ## Development
 
 ### Prerequisites
 
+#### Brew
+
 We assume `brew` for package management to install `IPFS` and other dependencies:
 
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+#### Metamask
+
+Metamask or Mist should be used for interacting with the townhall dapp.
+
+Install Metamask extensions into browser of choice, Chrome or Brave supported: [http://metamask.io](http://metamask.io)
+
+Import this private key into MetaMask for truffle develop and Ganache:
+
+        388c684f0ba1ef5017716adb5d21a053ea8e90277d0868337519f97bede61418
 
 ### Install app and dependencies
 
@@ -22,7 +34,9 @@ We assume `brew` for package management to install `IPFS` and other dependencies
 3. Run IPFS daemon in a separate window: `ipfs daemon`
 4. Run the app: `yarn start`
 
-It should open a browser to `http://localhost:3000/`
+A browser window should open after starting: `http://localhost:3000/`
+
+Ensure you are logged into MetaMask and switch to your imported account.
 
 You can obtain the deployed contracts addresses with `yarn run truffle network`:
 
@@ -78,8 +92,12 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 
 ### Deployment
 
-      Set the following environment variables:
+Set the following environment variables:
 
+          1. MENLO_DEPLOYMENT_STAGING_KEY:
+          2. MENLO_DEPLOYMENT_STAGING_SERVER:
+
+Deploy to server using `shipit`:
 
       yarn run shipit staging deploy
 

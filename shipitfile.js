@@ -1,6 +1,5 @@
 require('dotenv').config()
 
-
 module.exports = shipit => {
   require('shipit-deploy')(shipit)
 
