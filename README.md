@@ -1,6 +1,12 @@
 # Menlo Town Hall
 
+The Town Hall uses....
+
 ## Development
+
+
+To develop and run the town hall locally, install the following prerequisites and
+dependencies before running the app.
 
 ### Prerequisites
 
@@ -16,9 +22,13 @@ Metamask or Mist should be used for interacting with the townhall dapp.
 
 Install Metamask extensions into browser of choice, Chrome or Brave supported: [http://metamask.io](http://metamask.io)
 
-Import this private key into MetaMask for truffle develop and Ganache:
+#### Import development chain account
+
+Import this private key into MetaMask when using `truffle develop` and `Ganache`:
 
         388c684f0ba1ef5017716adb5d21a053ea8e90277d0868337519f97bede61418
+
+![import MetaMask](https://www.dropbox.com/s/5wwkrvv7yuzi1h7/MetaMaskImport.png?raw=1)
 
 ### Install app and dependencies
 
@@ -29,9 +39,9 @@ Import this private key into MetaMask for truffle develop and Ganache:
 
 ### Run the application for development
 
-1. Run a local dev blockchain in a window: `yarn run truffle develop`
-2. Deploy the contracts in a separate window: `yarn run truffle deploy`
-3. Run IPFS daemon in a separate window: `ipfs daemon`
+1. Run a local dev blockchain in a separate window: `yarn run truffle develop`
+2. Run IPFS daemon in a separate window: `ipfs daemon`
+3. Now, deploy the contracts: `yarn run truffle deploy`
 4. Run the app: `yarn start`
 
 A browser window should open after starting: `http://localhost:3000/`
@@ -61,25 +71,35 @@ you will have to redeploy the contracts and any transactions such as token balan
 
 ## Integration
 
-For a more consistent, local testing environment that is persistent, use a Dev chain with Parity or Geth.
+For a persistent local testing environment to test integration before deploying to
+testnet or mainnet, use a Dev chain with Parity or Geth.
 
 ### Parity
 
-To run a private dev chain with Parity, we'll first run a dev chain, setup Menlo needed accounts, and then
+To run a private dev chain with Parity, first run a dev chain, setup Menlo accounts, and then
 run contract deployment.
 
 You need to unlock your dev account to be able to run Truffle migrations easily.
-Pass the account address and a password file when running parity, that method is demonstrated below.
+Assuming a default Parity setup, the initial dev account with Ether issue is static.
+Pass the account address and a password when running parity, the default dev account password is a blank string.
+That method is demonstrated below:
 
         brew install parity
-        parity --config dev --unlock 0x00a329c0648769A73afAc7F9381E08FB43dBEA72 --password parity.account --force-ui  --jsonrpc-cors all -lrpc=trace --jsonrpc-apis web3,eth,net,personal,parity,parity_set,traces,rpc,parity_accounts  --no-persistent-txqueue
+        parity --config dev --unlock 0x00a329c0648769A73afAc7F9381E08FB43dBEA72 --password "" --force-ui  --jsonrpc-cors all -lrpc=trace --jsonrpc-apis web3,eth,net,personal,parity,parity_set,traces,rpc,parity_accounts  --no-persistent-txqueue
 
 Setup the needed Menlo accounts:
 
         yarn run truffle menlo:create-integration-accounts
 
+After running the account creation, a set of accounts will be displayed to
+add to your .env file.
 
-Use the `integration` network defined in `truffle.js` when using parity.
+Once you add the environment variables to your account, rerun parity with the
+helper script:
+
+        yarn run menlo:start-parity-dev-chain
+
+Now deploy the contracts, use the `integration` network defined in `truffle.js` when using parity.
 
         yarn run truffle deploy --network integration
 
@@ -104,6 +124,8 @@ Deploy to server using `shipit`:
 ## Staging and Testnet
 
 ### Rinkeby & Mist
+
+MetaMask can be used with a Rinkeby account to test against.
 
 The [Mist](https://github.com/ethereum/mist/releases) browser can be used to test the Rinkeby testnet.
 
@@ -142,11 +164,8 @@ Go to the faucet to get some free Ether: [Rinkeby Faucet](https://faucet.rinkeby
 Give your Mist account some TK/MET tokens:
 
         yarn run truffle console --network rinkeby
-        Token.deployed().then(i => i.transfer('0x00000000000', 100000) )
 
-Run the Message Board front-end and browse to [http://localhost:3000](http://localhost:3000)
-(this should be a staging server eventually) in Mist.
-
+Run the Town Hall and browse in Mist to [http://localhost:3000](http://localhost:3000).
 
 ### Kovan
 
