@@ -76,6 +76,13 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
       yarn test
 
 
+### Deployment
+
+      Set the following environment variables:
+
+
+      yarn run shipit staging deploy
+
 ## Staging and Testnet
 
 ### Rinkeby & Mist

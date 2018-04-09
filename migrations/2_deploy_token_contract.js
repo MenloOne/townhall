@@ -1,5 +1,4 @@
 var AppToken = artifacts.require("./AppToken.sol");
-var Web3 = require('web3')
 
 module.exports = (deployer, network) => {
   let trustee1, trustee2, trustee3;
