@@ -18,6 +18,8 @@ const forum = new EthereumForum();
 const lottery = new EthereumLottery()
 const graph = new MessageBoardGraph();
 
+forum.subscribeTopics(graph);
+
 const client = new Client(graph, forum, lottery, localStorage, remoteStorage);
 ReactDOM.render(<App client={client} />, document.getElementById('root'));
 

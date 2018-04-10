@@ -18,6 +18,17 @@ class EthereumForum {
         .then(i => { return i.post(parentHash, hash, {from: account}) })
     })
   }
+
+  subscribeTopics(graph) {
+    Forum.deployed().then(f => {
+      f.Topic({}, {fromBlock: 0}).watch((error, result) => {
+        const parentHash = HashUtils.solidityHashToCid(result.args._parentHash);
+        const messageHash = HashUtils.solidityHashToCid(result.args.contentHash);
+
+        graph.addNode(messageHash, parentHash);
+      });
+    });
+  }
 }
 
 export default EthereumForum;
