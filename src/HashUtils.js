@@ -7,10 +7,14 @@ import waterfall  from 'async/waterfall';
 let thisExport = {};
 
 thisExport.cidToSolidityHash = (cid) => {
+  if(cid === '0x0') { return '0x0000000000000000000000000000000000000000000000000000000000000000' };
+
   return '0x' + multihash.decode(new CID(cid).multihash).digest.toString('hex');
 }
 
 thisExport.solidityHashToCid = (hash) => {
+  if(hash === '0x0000000000000000000000000000000000000000000000000000000000000000') { return '0x0' };
+
   let theHash = hash;
 
   if(hash.length === 66) {
