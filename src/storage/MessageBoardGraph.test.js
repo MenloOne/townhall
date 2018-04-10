@@ -40,5 +40,11 @@ describe(MessageBoardGraph.name, () => {
       graph.addNode('child', 'parent')
       expect(graph.children('parent')).toEqual(['child'])
     })
+
+    it('does not allow a node to be added as a child of itself', () => {
+      let graph = new MessageBoardGraph()
+      graph.addNode('parent', 'parent')
+      expect(graph.children('parent')).toEqual([])
+    })
   })
 });
