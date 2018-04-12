@@ -32,6 +32,10 @@ class Client {
     });
   }
 
+  subscribeMessages(callback) {
+    this.graph.subscribeMessages(callback);
+  }
+
   getLocalMessages(nodeID) {
     const messageIDs = this.graph.children(nodeID || "0x0");
 

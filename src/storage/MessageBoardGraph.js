@@ -18,6 +18,12 @@ class MessageBoardGraph {
         this.nodes[parentID].push(nodeID)
       }
     }
+
+    if(this.callback) { this.callback(); }
+  }
+
+  subscribeMessages(callback) {
+    this.callback = callback;
   }
 }
 
