@@ -14,7 +14,9 @@ class MessageBoardGraph {
 
     if(parentID) {
       this.addNode(parentID)
-      if(parentID !== nodeID) { this.nodes[parentID].push(nodeID) }
+      if(parentID !== nodeID && !this.nodes[parentID].includes(nodeID)) {
+        this.nodes[parentID].push(nodeID)
+      }
     }
   }
 }
