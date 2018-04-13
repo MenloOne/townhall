@@ -38,7 +38,7 @@ class JavascriptIPFSStorage {
   findMessage(hash) {
     return new Promise((resolve, reject) => {
       this.ipfs.dag.get(hash, (err, result) => {
-        resolve(result.value);
+        result ? resolve({...result.value, hash: hash}) : resolve(null)
       })
     })
   }

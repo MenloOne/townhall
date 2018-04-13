@@ -48,10 +48,15 @@ class Client {
     });
   }
 
+  subscribeMessages(callback) {
+    this.graph.subscribeMessages(callback);
+  }
+
   getLocalMessages(nodeID) {
     const messageIDs = this.graph.children(nodeID || "0x0");
 
-    return Promise.all(messageIDs.map(id => this.localStorage.findMessage(id)));
+    return Promise.all(messageIDs.map(id => this.localStorage.findMessage(id)))
+      .then(messages => messages.filter(m => m));
   }
 
   async createMessage(messageBody, parentHash) {

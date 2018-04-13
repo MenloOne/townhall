@@ -30,8 +30,16 @@ class MessageBoardGraph {
 
     if(parentID) {
       this.addNode(parentID)
-      this.nodes[parentID].push(nodeID)
+      if(parentID !== nodeID && !this.nodes[parentID].includes(nodeID)) {
+        this.nodes[parentID].push(nodeID)
+      }
     }
+
+    if(this.callback) { this.callback(); }
+  }
+
+  subscribeMessages(callback) {
+    this.callback = callback;
   }
 }
 

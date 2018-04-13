@@ -26,6 +26,11 @@ class MessagesContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.props.client.subscribeMessages(this.refreshMessages.bind(this));
+    this.refreshMessages();
+  }
+
+  refreshMessages() {
     this.props.client.getLocalMessages()
       .then(messages => this.setState({ messages }));
   }

@@ -27,7 +27,8 @@ describe('MessagesContainer', () => {
   beforeEach(() => {
     client = {
       getLocalMessages: jest.fn(() => Promise.resolve(['message1', 'message2'])),
-      createMessage: jest.fn(() => Promise.resolve('someMessageHash'))
+      createMessage: jest.fn(() => Promise.resolve('someMessageHash')),
+      subscribeMessages: jest.fn()
     };
 
     messagesContainer = shallow(<MessagesContainer client={client} />);
@@ -35,7 +36,8 @@ describe('MessagesContainer', () => {
 
   it('renders a placeholder if there are no messages retrieved from the client', () => {
     client = {
-      getLocalMessages: jest.fn(() => Promise.resolve([]))
+      getLocalMessages: jest.fn(() => Promise.resolve([])),
+      subscribeMessages: jest.fn()
     };
 
     messagesContainer = shallow(<MessagesContainer client={client} />);
