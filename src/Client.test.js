@@ -84,6 +84,16 @@ describe('Client', () => {
           expect(messages[1]).toEqual(localMessages['hash2']);
         });
     });
+
+    it('excludes missing messages', () => {
+      graph.children = jest.fn(() => ['hash1', 'missing', 'hash2'])
+
+      return client.getLocalMessages()
+        .then(messages => {
+          expect(messages[0]).toEqual(localMessages['hash1']);
+          expect(messages[1]).toEqual(localMessages['hash2']);
+        });
+    })
   });
 
   describe('creating a message', () => {
