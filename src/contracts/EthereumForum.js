@@ -19,7 +19,7 @@ class EthereumForum {
     })
   }
 
-  subscribeTopics(graph) {
+  subscribeMessages(graph) {
     Forum.deployed().then(f => {
       f.Topic({}, {fromBlock: 0}).watch((error, result) => {
         const parentHash = HashUtils.solidityHashToCid(result.args._parentHash);
