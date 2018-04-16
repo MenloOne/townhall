@@ -17,38 +17,31 @@
 import web3 from 'web3_override';
 import TruffleContract from 'truffle-contract';
 import LotteryContract from 'truffle_artifacts/contracts/Lottery.json';
-import HashUtils from 'HashUtils';
 
 let Lottery = TruffleContract(LotteryContract);
 Lottery.setProvider(web3.currentProvider);
 
 class EthereumLottery {
-  votes = (hash) => {
-    hash = HashUtils.cidToSolidityHash(hash);
-
+  votes = (offset) => {
     return Lottery.deployed()
-      .then(i => i.votes(hash))
+      .then(i => i.votes.call(offset))
   }
 
-  upvote = async (hash) => {
-    hash = HashUtils.cidToSolidityHash(hash);
-
+  upvote = async (offset) => {
     return web3.eth.getAccounts().then(async (accounts) => {
       let account = accounts[0];
 
       return Lottery.deployed()
-        .then(i => i.upvote(hash, {from: account}))
+        .then(i => i.upvote(offset, {from: account}))
     })
   }
 
-  downvote = async (hash) => {
-    hash = HashUtils.cidToSolidityHash(hash);
-
+  downvote = async (offset) => {
     return web3.eth.getAccounts().then(async (accounts) => {
       let account = accounts[0];
 
       return Lottery.deployed()
-        .then(i => i.downvote(hash, {from: account}))
+        .then(i => i.downvote(offset, {from: account}))
     })
   }
 }

@@ -77,15 +77,15 @@ class Client {
   }
 
   getVotes(messageHash) {
-    return this.lottery.votes(messageHash);
+    return this.lottery.votes(this.forum.topicOffset(messageHash));
   }
 
   upvote(messageHash) {
-    return this.lottery.upvote(messageHash);
+    return this.lottery.upvote(this.forum.topicOffset(messageHash));
   }
 
   downvote(messageHash) {
-    return this.lottery.downvote(messageHash);
+    return this.lottery.downvote(this.forum.topicOffset(messageHash));
   }
 }
 
