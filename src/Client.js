@@ -72,8 +72,6 @@ class Client {
     await this.forum.post(messageHash, message.parent)
       .catch(() => Promise.reject(new MessageBoardError('An error occurred verifying the message.')));
 
-    this.graph.addNode(messageHash, message.parent);
-
     return this.remoteStorage.pin(messageHash)
       .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to Menlo IPFS.')));
   }
