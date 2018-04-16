@@ -46,6 +46,7 @@ class MessagesContainer extends React.Component {
       return (
           <Message key={`${index}-${message.hash}`}
             hash={message.hash}
+            votes={this.props.client.getVotes(message.hash)}
             type={"parent"}
             client={this.props.client}
             body={message.body} />);

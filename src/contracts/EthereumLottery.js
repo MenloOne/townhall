@@ -25,6 +25,7 @@ class EthereumLottery {
   votes = (offset) => {
     return Lottery.deployed()
       .then(i => i.votes.call(offset))
+      .then(r => parseInt(r.toString(), 0))
   }
 
   upvote = async (offset) => {

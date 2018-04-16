@@ -40,15 +40,15 @@ class EthereumForum {
     })
   }
 
-  subscribeMessages(graph) {
+  subscribeMessages(callback) {
     Forum.deployed().then(f => {
       f.Topic({}, {fromBlock: 0}).watch((error, result) => {
         const parentHash = HashUtils.solidityHashToCid(result.args._parentHash);
         const messageHash = HashUtils.solidityHashToCid(result.args.contentHash);
 
-        graph.addNode(messageHash, parentHash);
         this.topicOffsets[messageHash] = this.topicOffsetCounter;
         this.topicOffsetCounter = this.topicOffsetCounter + 1;
+        callback(messageHash, parentHash);
       });
     });
   }

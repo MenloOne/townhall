@@ -27,6 +27,9 @@ class Client {
     this.localStorage = localStorage;
     this.remoteStorage = remoteStorage;
     this.token = truffleContract(tokenContract);
+
+    forum.subscribeMessages(this.onNewMessage.bind(this));
+    this.votes = {};
   }
 
   getAccountDetails() {
@@ -46,6 +49,14 @@ class Client {
           .then(balance => resolve({ account, balance }));
       });
     });
+  }
+
+  onNewMessage(messageHash, parentHash) {
+    this.lottery.votes(this.forum.topicOffset(messageHash))
+      .then(votesCount => {
+        this.votes[messageHash] = votesCount
+        this.graph.addNode(messageHash, parentHash);
+      })
   }
 
   subscribeMessages(callback) {
@@ -77,7 +88,7 @@ class Client {
   }
 
   getVotes(messageHash) {
-    return this.lottery.votes(this.forum.topicOffset(messageHash));
+    return this.votes[messageHash];
   }
 
   upvote(messageHash) {

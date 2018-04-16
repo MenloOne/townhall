@@ -22,12 +22,7 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showReplyForm: false, children: [], votes: 0, upvote: 0, downvote: 0 };
-  }
-
-  componentDidMount() {
-    this.props.client.getVotes(this.props.hash)
-      .then(votes => this.setState({votes: parseInt(votes.toString(), 0)}))
+    this.state = { showReplyForm: false, children: [], votes: this.props.votes, upvote: 0, downvote: 0 };
   }
 
   showReplyForm() {
