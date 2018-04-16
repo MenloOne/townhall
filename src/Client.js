@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import web3 from 'web3_override';
+import web3 from './web3_override';
 import truffleContract from 'truffle-contract';
-import tokenContract from 'truffle_artifacts/contracts/AppToken.json';
-import MessageBoardError from 'MessageBoardError';
+import tokenContract from './truffle_artifacts/contracts/AppToken.json';
+import MessageBoardError from './MessageBoardError';
 
 class Client {
   constructor(graph, forum, lottery, localStorage, remoteStorage) {
