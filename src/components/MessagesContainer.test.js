@@ -67,9 +67,6 @@ describe('MessagesContainer', () => {
     return messageForm.props().onSubmit('someMessageBody')
       .then(() => {
         expect(client.createMessage).toHaveBeenCalledWith('someMessageBody');
-        expect(instance.setState).toHaveBeenCalledWith({
-          messages: [...messages, { body: 'someMessageBody', hash: 'someMessageHash' }]
-        });
       });
   });
 });
