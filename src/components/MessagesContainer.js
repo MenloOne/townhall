@@ -22,7 +22,7 @@ class MessagesContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { messages: [] };
+    this.state = { messages: [], topFive: false };
   }
 
   componentDidMount() {
@@ -39,10 +39,26 @@ class MessagesContainer extends React.Component {
     return this.props.client.createMessage(messageBody);
   }
 
+  topFiveMessages() {
+    return [...this.state.messages].sort((a, b) => {
+      if(this.props.client.getVotes(a.hash) > this.props.client.getVotes(b.hash)) {
+        return -1;
+      }
+
+      if(this.props.client.getVotes(a.hash) < this.props.client.getVotes(b.hash)) {
+        return 1;
+      }
+
+      return 0;
+    }).slice(0, 5)
+  }
+
   renderMessages() {
     if (this.state.messages.length === 0) return (<p>There are no messages.</p>);
 
-    return this.state.messages.map((message, index) => {
+    const messages = this.state.topFive ? this.topFiveMessages() : this.state.messages;
+
+    return messages.map((message, index) => {
       return (
           <Message key={`${index}-${message.hash}`}
             hash={message.hash}
@@ -53,9 +69,18 @@ class MessagesContainer extends React.Component {
     });
   }
 
+  renderViewMessagesButton() {
+    if(this.state.topFive) {
+      return (<button onClick={() => this.setState({topFive: false})}>View All Messages</button>)
+    } else {
+      return (<button onClick={() => this.setState({topFive: true})}>View Top Five Messages</button>)
+    }
+  }
+
   render() {
     return (
         <React.Fragment>
+          <div>{this.renderViewMessagesButton()}</div>
           <div>{this.renderMessages()}</div>
           <MessageForm onSubmit={this.onFormSubmit.bind(this)} />
         </React.Fragment>
