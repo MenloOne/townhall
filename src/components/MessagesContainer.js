@@ -36,11 +36,7 @@ class MessagesContainer extends React.Component {
   }
 
   onFormSubmit(messageBody) {
-    return this.props.client.createMessage(messageBody)
-      .then(messageHash => {
-        const message = { hash: messageHash, body: messageBody };
-        this.setState({ messages: [...this.state.messages, message] });
-      });
+    return this.props.client.createMessage(messageBody);
   }
 
   renderMessages() {
