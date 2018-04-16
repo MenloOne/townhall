@@ -40,17 +40,19 @@ class MessagesContainer extends React.Component {
   }
 
   topFiveMessages() {
-    return [...this.state.messages].sort((a, b) => {
-      if(this.props.client.getVotes(a.hash) > this.props.client.getVotes(b.hash)) {
-        return -1;
-      }
+    return this.state.messages.filter(m => this.props.client.topicOffset(m.hash) > this.props.client.epoch)
+      .sort((a, b) => {
+        if(this.props.client.getVotes(a.hash) > this.props.client.getVotes(b.hash)) {
+          return -1;
+        }
 
-      if(this.props.client.getVotes(a.hash) < this.props.client.getVotes(b.hash)) {
-        return 1;
-      }
+        if(this.props.client.getVotes(a.hash) < this.props.client.getVotes(b.hash)) {
+          return 1;
+        }
 
-      return 0;
-    }).slice(0, 5)
+        return 0;
+      })
+      .slice(0, 5)
   }
 
   renderMessages() {

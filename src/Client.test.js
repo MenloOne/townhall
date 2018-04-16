@@ -27,8 +27,8 @@ describe('Client', () => {
 
   beforeEach(() => {
     graph = { children: jest.fn(() => children) };
-    forum = { post: jest.fn(() => Promise.resolve(true)) };
-    lottery = { };
+    forum = { post: jest.fn(() => Promise.resolve(true)), subscribeMessages: jest.fn() };
+    lottery = { epoch: jest.fn(() => Promise.resolve(0)) };
     localStorage = {
       createMessage: jest.fn(() => Promise.resolve('localHash')),
       findMessage: jest.fn((hash) => Promise.resolve(localMessages[hash]))
@@ -125,7 +125,7 @@ describe('Client', () => {
     });
 
     it('throws a MessageBoardError if forum rejects posting the message', () => {
-      forum = { post: jest.fn(() => Promise.reject()) };
+      forum = { post: jest.fn(() => Promise.reject()), subscribeMessages: jest.fn() };
 
       client = new Client(graph, forum, lottery, localStorage, remoteStorage);
 

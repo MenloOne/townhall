@@ -30,6 +30,8 @@ class Client {
 
     forum.subscribeMessages(this.onNewMessage.bind(this));
     this.votes = {};
+    this.epoch = 0;
+    lottery.epoch().then(e => { this.epoch = e});
   }
 
   getAccountDetails() {
@@ -87,16 +89,20 @@ class Client {
       .catch(() => Promise.reject(new MessageBoardError('An error occurred saving the message to Menlo IPFS.')));
   }
 
+  topicOffset(messageHash) {
+    return this.forum.topicOffset(messageHash);
+  }
+
   getVotes(messageHash) {
     return this.votes[messageHash];
   }
 
   upvote(messageHash) {
-    return this.lottery.upvote(this.forum.topicOffset(messageHash));
+    return this.lottery.upvote(this.topicOffset(messageHash));
   }
 
   downvote(messageHash) {
-    return this.lottery.downvote(this.forum.topicOffset(messageHash));
+    return this.lottery.downvote(this.topicOffset(messageHash));
   }
 }
 

@@ -22,6 +22,12 @@ let Lottery = TruffleContract(LotteryContract);
 Lottery.setProvider(web3.currentProvider);
 
 class EthereumLottery {
+  epoch = () => {
+    return Lottery.deployed()
+      .then(l => l.epochCurrent.call())
+      .then(r => parseInt(r.toString(), 0))
+  }
+
   votes = (offset) => {
     return Lottery.deployed()
       .then(i => i.votes.call(offset))
