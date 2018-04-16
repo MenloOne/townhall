@@ -22,11 +22,12 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showReplyForm: false, children: [], votes: null };
+    this.state = { showReplyForm: false, children: [], votes: 0, upvote: 0, downvote: 0 };
   }
 
   componentDidMount() {
-    this.refreshVotes()
+    this.props.client.getVotes(this.props.hash)
+      .then(votes => this.setState({votes: parseInt(votes.toString(), 0)}))
   }
 
   showReplyForm() {
@@ -47,18 +48,25 @@ class Message extends React.Component {
       });
   }
 
-  refreshVotes() {
-    this.props.client.getVotes(this.props.hash)
-      .then(votes => this.setState({votes: votes.toString()}))
-  }
-
   upvote() {
     this.props.client.upvote(this.props.hash)
-      .then(r => this.refreshVotes())
+      .then(r => {
+        this.setState({
+          votes: this.state.votes + 1 + this.state.downvote,
+          downvote: 0,
+          upvote: 1
+        });
+      })
   }
   downvote() {
     this.props.client.downvote(this.props.hash)
-      .then(r => this.refreshVotes())
+    .then(r => {
+      this.setState({
+        votes: this.state.votes - 1 - this.state.upvote,
+        downvote: 1,
+        upvote: 0
+      });
+    })
   }
 
   render() {
@@ -68,8 +76,8 @@ class Message extends React.Component {
           {this.state.votes && <div className="votes">votes: {this.state.votes}</div>}
           <div className="actions">
             {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
-            {' '}<a onClick={this.upvote.bind(this)}>++</a>
-            {' '}<a onClick={this.downvote.bind(this)}>--</a>
+            {' '}{this.state.upvote === 0 && <a onClick={this.upvote.bind(this)}>++</a>}
+            {' '}{this.state.downvote === 0 && <a onClick={this.downvote.bind(this)}>--</a>}
           </div>
           {this.state.showReplyForm &&
             <MessageForm id={this.props.hash} type={"Response"} onSubmit={(message) => this.reply(message)} />}
