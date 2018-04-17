@@ -28,7 +28,8 @@ describe('MessagesContainer', () => {
     client = {
       getLocalMessages: jest.fn(() => Promise.resolve(['message1', 'message2'])),
       createMessage: jest.fn(() => Promise.resolve('someMessageHash')),
-      subscribeMessages: jest.fn()
+      subscribeMessages: jest.fn(),
+      getVotes: jest.fn(0)
     };
 
     messagesContainer = shallow(<MessagesContainer client={client} />);

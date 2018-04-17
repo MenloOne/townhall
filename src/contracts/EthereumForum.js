@@ -23,6 +23,11 @@ let Forum = TruffleContract(ForumContract);
 Forum.setProvider(web3.currentProvider);
 
 class EthereumForum {
+  constructor() {
+    this.topicOffsetCounter = 0;
+    this.topicOffsets = {};
+  }
+
   post = async (hash, parentHash) => {
     hash = HashUtils.cidToSolidityHash(hash);
     if(parentHash !== '0x0') { parentHash = HashUtils.cidToSolidityHash(parentHash); }
@@ -35,15 +40,21 @@ class EthereumForum {
     })
   }
 
-  subscribeMessages(graph) {
+  subscribeMessages(callback) {
     Forum.deployed().then(f => {
       f.Topic({}, {fromBlock: 0}).watch((error, result) => {
         const parentHash = HashUtils.solidityHashToCid(result.args._parentHash);
         const messageHash = HashUtils.solidityHashToCid(result.args.contentHash);
 
-        graph.addNode(messageHash, parentHash);
+        this.topicOffsets[messageHash] = this.topicOffsetCounter;
+        this.topicOffsetCounter = this.topicOffsetCounter + 1;
+        callback(messageHash, parentHash);
       });
     });
+  }
+
+  topicOffset(hash) {
+    return this.topicOffsets[hash];
   }
 }
 

@@ -26,9 +26,9 @@ describe('Client', () => {
   let graph, forum, lottery, localStorage, remoteStorage, contract, client;
 
   beforeEach(() => {
-    graph = { addNode: jest.fn(() => true), children: jest.fn(() => children) };
-    forum = { post: jest.fn(() => Promise.resolve(true)) };
-    lottery = { };
+    graph = { children: jest.fn(() => children) };
+    forum = { post: jest.fn(() => Promise.resolve(true)), subscribeMessages: jest.fn() };
+    lottery = { epoch: jest.fn(() => Promise.resolve(0)) };
     localStorage = {
       createMessage: jest.fn(() => Promise.resolve('localHash')),
       findMessage: jest.fn((hash) => Promise.resolve(localMessages[hash]))
@@ -125,7 +125,7 @@ describe('Client', () => {
     });
 
     it('throws a MessageBoardError if forum rejects posting the message', () => {
-      forum = { post: jest.fn(() => Promise.reject()) };
+      forum = { post: jest.fn(() => Promise.reject()), subscribeMessages: jest.fn() };
 
       client = new Client(graph, forum, lottery, localStorage, remoteStorage);
 
@@ -146,7 +146,7 @@ describe('Client', () => {
         });
     });
 
-    it('stores the message in localStorage, forum, graph, and pins to remoteStorage with parent hash 0x0', () => {
+    it('stores the message in localStorage, forum, and pins to remoteStorage with parent hash 0x0', () => {
       return client.createMessage('someMessage')
         .then(resolved => {
           expect(localStorage.createMessage).toHaveBeenCalledWith({
@@ -156,13 +156,12 @@ describe('Client', () => {
           });
 
           expect(forum.post).toHaveBeenCalledWith('localHash', '0x0');
-          expect(graph.addNode).toHaveBeenCalledWith('localHash', '0x0');
           expect(remoteStorage.pin).toHaveBeenCalledWith('localHash');
           expect(resolved).toEqual('resolvedHash');
         });
     });
 
-    it('stores the message in localStorage, forum, graph, and pins to remoteStorage with given parent hash', () => {
+    it('stores the message in localStorage, forum, and pins to remoteStorage with given parent hash', () => {
       return client.createMessage('someMessage', 'parentHash')
         .then(resolved => {
           expect(localStorage.createMessage).toHaveBeenCalledWith({
@@ -172,7 +171,6 @@ describe('Client', () => {
           });
 
           expect(forum.post).toHaveBeenCalledWith('localHash', 'parentHash');
-          expect(graph.addNode).toHaveBeenCalledWith('localHash', 'parentHash');
           expect(remoteStorage.pin).toHaveBeenCalledWith('localHash');
           expect(resolved).toEqual('resolvedHash');
         });
