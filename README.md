@@ -220,3 +220,7 @@ TBD
 ## Production and Mainnet
 
 ...
+
+## Overriding the default configuration
+
+This repo uses [create-react-app environment variables](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-development-environment-variables-in-env).
