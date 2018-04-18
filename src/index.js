@@ -26,7 +26,7 @@ import App from 'components/App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-const remoteStorage = new RemoteIPFSStorage();
+const remoteStorage = new RemoteIPFSStorage(process.env.REACT_APP_REMOTE_IPFS);
 const localStorage = new JavascriptIPFSStorage();
 localStorage.connectPeer(remoteStorage);
 
