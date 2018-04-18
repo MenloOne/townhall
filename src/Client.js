@@ -46,6 +46,7 @@ class Client {
           return reject();
         }
 
+        this.account = account;
         this.token.deployed()
           .then(i => i.balanceOf(account))
           .then(balance => resolve({ account, balance }));
@@ -76,7 +77,8 @@ class Client {
     const message = {
       version: "CONTRACT_VERSION",
       parent: parentHash || "0x0",
-      body: messageBody
+      body: messageBody,
+      issuer: this.account
     };
 
     const messageHash = await this.localStorage.createMessage(message)
