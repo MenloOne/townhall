@@ -28,6 +28,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshAccountDetails();
+  }
+
+  refreshAccountDetails() {
     this.props.client.getAccountDetails()
       .then(({ account, balance }) => this.setState({ account, balance, authenticated: true, isLoading: false }))
       .catch(() => this.setState({ authenticated: false, isLoading: false }));
@@ -48,7 +52,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <PayoutsContainer client={this.props.client} />
+        <PayoutsContainer client={this.props.client} afterClaim={this.refreshAccountDetails.bind(this)} />
         <MessagesContainer client={this.props.client} />
         <AccountDetails account={this.state.account} balance={this.state.balance} />
       </div>
