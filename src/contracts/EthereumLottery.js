@@ -62,6 +62,16 @@ class EthereumLottery {
     return Promise.all(promises)
   }
 
+  rewards = async () => {
+    let promises = [0,1,2,3,4].map(i =>
+      Lottery.deployed()
+        .then(l => l.reward.call(i))
+        .then(r => r.toString())
+    )
+
+    return Promise.all(promises)
+  }
+
   claim = async (payoutIndex) => {
     return web3.eth.getAccounts().then(async (accounts) => {
       let account = accounts[0];
@@ -70,12 +80,6 @@ class EthereumLottery {
       return Lottery.deployed()
         .then(i => i.claim(payoutIndex, {from: account}))
     })
-  }
-
-  reward = async (payoutIndex) => {
-    return Lottery.deployed()
-      .then(i => i.reward.call(payoutIndex))
-      .then(r => parseInt(r.toString(), 0))
   }
 }
 

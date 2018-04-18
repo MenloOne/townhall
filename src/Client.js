@@ -115,8 +115,8 @@ class Client {
     return this.lottery.claim(payoutIndex);
   }
 
-  getReward(payoutIndex) {
-    return this.lottery.reward(payoutIndex);
+  getRewards() {
+    return this.lottery.rewards();
   }
 }
 
