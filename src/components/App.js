@@ -17,6 +17,7 @@
 import React from 'react';
 import AccountDetails from './AccountDetails';
 import MessagesContainer from './MessagesContainer';
+import PayoutsContainer from './PayoutsContainer';
 import './App.css';
 
 class App extends React.Component {
@@ -47,6 +48,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <PayoutsContainer client={this.props.client} />
         <MessagesContainer client={this.props.client} />
         <AccountDetails account={this.state.account} balance={this.state.balance} />
       </div>

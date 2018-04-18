@@ -106,6 +106,18 @@ class Client {
   downvote(messageHash) {
     return this.lottery.downvote(this.topicOffset(messageHash));
   }
+
+  getPayoutAccounts() {
+    return this.lottery.payoutAccounts();
+  }
+
+  claim(payoutIndex) {
+    return this.lottery.claim(payoutIndex);
+  }
+
+  getReward(payoutIndex) {
+    return this.lottery.reward(payoutIndex);
+  }
 }
 
 export default Client;
