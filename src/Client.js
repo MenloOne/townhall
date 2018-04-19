@@ -66,6 +66,10 @@ class Client {
     this.graph.subscribeMessages(callback);
   }
 
+  countReplies(nodeID) {
+    return this.graph.children(nodeID).length;
+  }
+
   getLocalMessages(nodeID) {
     const messageIDs = this.graph.children(nodeID || "0x0");
 
