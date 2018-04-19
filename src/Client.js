@@ -96,7 +96,7 @@ class Client {
   }
 
   getVotes(messageHash) {
-    return this.votes[messageHash];
+    return this.votes[messageHash] || 0;
   }
 
   upvote(messageHash) {

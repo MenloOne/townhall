@@ -35,6 +35,7 @@ class Message extends React.Component {
         const child = (
             <Message key={`${this.state.children.length}-${messageHash}`}
               hash={messageHash}
+              votes={this.props.client.getVotes(messageHash)}
               type={"child"}
               client={this.props.client}
               body={messageBody} />);
