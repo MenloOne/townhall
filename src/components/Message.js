@@ -29,9 +29,9 @@ class Message extends React.Component {
     this.setState({ showReplyForm: true });
   }
 
-  reply(messageBody) {
+  reply = async (messageBody) => {
     return this.props.client.createMessage(messageBody, this.props.hash)
-      .then(messageHash => {
+      .then(async messageHash => {
         const child = (
             <Message key={`${this.state.children.length}-${messageHash}`}
               hash={messageHash}
@@ -40,6 +40,7 @@ class Message extends React.Component {
               client={this.props.client}
               body={messageBody} />);
 
+        await this.showReplies(true);
         this.setState({ children: [...this.state.children, child], showReplyForm: false });
       });
   }
@@ -67,13 +68,13 @@ class Message extends React.Component {
   }
 
   countReplies() {
-    return this.props.client.countReplies(this.props.hash);
+    return this.state.children.length > 0 ? this.state.children.length : this.props.client.countReplies(this.props.hash);
   }
 
-  showReplies() {
-    if(this.state.showReplies) { this.setState({showReplies: false}); return }
+  showReplies = async (show) => {
+    if(!show) { this.setState({showReplies: false}); return }
 
-    this.props.client.getLocalMessages(this.props.hash).then(replies => {
+    await this.props.client.getLocalMessages(this.props.hash).then(replies => {
       const replyItems = replies.map(r => {
         return <Message key={r.hash}
           hash={r.hash}
@@ -96,7 +97,7 @@ class Message extends React.Component {
             {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
             {' '}{this.state.upvote === 0 && <a onClick={this.upvote.bind(this)}>++</a>}
             {' '}{this.state.downvote === 0 && <a onClick={this.downvote.bind(this)}>--</a>}
-            {' '}{this.props.type === "parent" && this.countReplies() > 0 && <a onClick={this.showReplies.bind(this)}>{this.countReplies()} replies</a>}
+            {' '}{this.props.type === "parent" && this.countReplies() > 0 && <a onClick={() => this.showReplies(!this.state.showReplies)}>{this.countReplies()} replies</a>}
           </div>
           {this.state.showReplyForm &&
             <MessageForm id={this.props.hash} type={"Response"} onSubmit={(message) => this.reply(message)} />}
