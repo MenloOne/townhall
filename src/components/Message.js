@@ -22,7 +22,7 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showReplyForm: false, showReplies: false, children: [], votes: this.props.votes, upvote: 0, downvote: 0 };
+    this.state = { showReplyForm: false, showReplies: false, children: [], votes: this.props.votes || 0, upvote: 0, downvote: 0 };
   }
 
   showReplyForm() {
@@ -88,15 +88,27 @@ class Message extends React.Component {
     });
   }
 
+  messageStatus() {
+    return this.props.client.topicOffset(this.props.hash) ? "complete" : "pending";
+  }
+
+  messageComplete() {
+    return this.messageStatus() === "complete";
+  }
+
+  messagePending() {
+    return this.messageStatus() === "pending";
+  }
+
   render() {
     return (
         <div className={`message ${this.props.type}`}>
           <div className="text">{this.props.body}</div>
-          {this.state.votes && <div className="votes">votes: {this.state.votes}</div>}
+          {this.state.votes > 0 && <div className="votes">votes: {this.state.votes}</div>}
           <div className="actions">
-            {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
-            {' '}{this.state.upvote === 0 && <a onClick={this.upvote.bind(this)}>++</a>}
-            {' '}{this.state.downvote === 0 && <a onClick={this.downvote.bind(this)}>--</a>}
+            {this.props.type === "parent" && this.messageComplete() && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
+            {' '}{this.state.upvote === 0 && this.messageComplete() && <a onClick={this.upvote.bind(this)}>++</a>}
+            {' '}{this.state.downvote === 0 && this.messageComplete() && <a onClick={this.downvote.bind(this)}>--</a>}
             {' '}{this.props.type === "parent" && this.countReplies() > 0 && <a onClick={() => this.showReplies(!this.state.showReplies)}>{this.countReplies()} replies</a>}
           </div>
           {this.state.showReplyForm &&

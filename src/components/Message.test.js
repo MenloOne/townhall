@@ -26,8 +26,9 @@ describe('Message', () => {
     client = {
       createMessage: jest.fn(() => Promise.resolve('newMessageHash')),
       getVotes: jest.fn(() => Promise.resolve(1)),
-      countReplies: jest.fn(0),
-      getLocalMessages: jest.fn(() => Promise.resolve([]))
+      countReplies: jest.fn(() => 0),
+      getLocalMessages: jest.fn(() => Promise.resolve([])),
+      topicOffset: jest.fn(() => 1)
     };
   })
 
