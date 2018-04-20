@@ -96,7 +96,7 @@ class Message extends React.Component {
             {this.props.type === "parent" && <a className="reply" onClick={this.showReplyForm.bind(this)}>reply</a>}
             {' '}{this.state.upvote === 0 && <a onClick={this.upvote.bind(this)}>++</a>}
             {' '}{this.state.downvote === 0 && <a onClick={this.downvote.bind(this)}>--</a>}
-            {' '}{this.countReplies() > 0 && <a onClick={this.showReplies.bind(this)}>{this.countReplies()} replies</a>}
+            {' '}{this.props.type === "parent" && this.countReplies() > 0 && <a onClick={this.showReplies.bind(this)}>{this.countReplies()} replies</a>}
           </div>
           {this.state.showReplyForm &&
             <MessageForm id={this.props.hash} type={"Response"} onSubmit={(message) => this.reply(message)} />}
