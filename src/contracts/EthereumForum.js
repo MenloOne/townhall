@@ -46,9 +46,11 @@ class EthereumForum {
         const parentHash = HashUtils.solidityHashToCid(result.args._parentHash);
         const messageHash = HashUtils.solidityHashToCid(result.args.contentHash);
 
-        this.topicOffsets[messageHash] = this.topicOffsetCounter;
-        this.topicOffsetCounter = this.topicOffsetCounter + 1;
-        callback(messageHash, parentHash);
+        if(!this.topicOffsets[messageHash]) { // sometimes we get the same topic twice...
+          this.topicOffsets[messageHash] = this.topicOffsetCounter;
+          this.topicOffsetCounter = this.topicOffsetCounter + 1;
+          callback(messageHash, parentHash);
+        }
       });
     });
   }
