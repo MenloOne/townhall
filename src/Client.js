@@ -46,6 +46,7 @@ class Client {
           return reject();
         }
 
+        this.account = account;
         this.token.deployed()
           .then(i => i.balanceOf(account))
           .then(balance => resolve({ account, balance }));
@@ -65,6 +66,10 @@ class Client {
     this.graph.subscribeMessages(callback);
   }
 
+  countReplies(nodeID) {
+    return this.graph.children(nodeID).length;
+  }
+
   getLocalMessages(nodeID) {
     const messageIDs = this.graph.children(nodeID || "0x0");
 
@@ -76,7 +81,8 @@ class Client {
     const message = {
       version: "CONTRACT_VERSION",
       parent: parentHash || "0x0",
-      body: messageBody
+      body: messageBody,
+      issuer: this.account
     };
 
     const messageHash = await this.localStorage.createMessage(message)
@@ -94,7 +100,7 @@ class Client {
   }
 
   getVotes(messageHash) {
-    return this.votes[messageHash];
+    return this.votes[messageHash] || 0;
   }
 
   upvote(messageHash) {
@@ -103,6 +109,18 @@ class Client {
 
   downvote(messageHash) {
     return this.lottery.downvote(this.topicOffset(messageHash));
+  }
+
+  getPayoutAccounts() {
+    return this.lottery.payoutAccounts();
+  }
+
+  claim(payoutIndex) {
+    return this.lottery.claim(payoutIndex);
+  }
+
+  getRewards() {
+    return this.lottery.rewards();
   }
 }
 
