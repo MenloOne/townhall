@@ -27,7 +27,9 @@ describe('MessagesContainer', () => {
   beforeEach(() => {
     client = {
       getLocalMessages: jest.fn(() => Promise.resolve(['message1', 'message2'])),
-      createMessage: jest.fn(() => Promise.resolve('someMessageHash'))
+      createMessage: jest.fn(() => Promise.resolve('someMessageHash')),
+      subscribeMessages: jest.fn(),
+      getVotes: jest.fn(0)
     };
 
     messagesContainer = shallow(<MessagesContainer client={client} />);
@@ -35,7 +37,8 @@ describe('MessagesContainer', () => {
 
   it('renders a placeholder if there are no messages retrieved from the client', () => {
     client = {
-      getLocalMessages: jest.fn(() => Promise.resolve([]))
+      getLocalMessages: jest.fn(() => Promise.resolve([])),
+      subscribeMessages: jest.fn()
     };
 
     messagesContainer = shallow(<MessagesContainer client={client} />);
@@ -65,9 +68,6 @@ describe('MessagesContainer', () => {
     return messageForm.props().onSubmit('someMessageBody')
       .then(() => {
         expect(client.createMessage).toHaveBeenCalledWith('someMessageBody');
-        expect(instance.setState).toHaveBeenCalledWith({
-          messages: [...messages, { body: 'someMessageBody', hash: 'someMessageHash' }]
-        });
       });
   });
 });

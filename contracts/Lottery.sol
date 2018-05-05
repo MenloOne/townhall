@@ -16,8 +16,8 @@
 pragma solidity^0.4.19;
 
 import "./AppToken.sol";
-import "./forum.sol";
-import "./redeemer.sol";
+import "./Forum.sol";
+import "./Redeemer.sol";
 
 contract Lottery is Beneficiary, Sponsored {
     // though ERC20 says tokens *should* revert in transferFrom without allowance

@@ -15,7 +15,7 @@
 */
 pragma solidity^0.4.19;
 
-import "./sponsored.sol";
+import "./Sponsored.sol";
 
 interface Beneficiary {
     function onPost(address _poster) external;

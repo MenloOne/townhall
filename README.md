@@ -50,17 +50,15 @@ Import this private key into MetaMask for use with `truffle develop` and `Ganach
 3. Now, deploy the contracts: `yarn run truffle deploy`
 4. Run the app: `yarn start`
 
+### Interact with Town Hall
+
 A browser window should open after starting: `http://localhost:3000/`
 
 Ensure you are logged into MetaMask and switch to your imported account.
 
-You can obtain the deployed contracts addresses with `yarn run truffle network`:
+Set the network in MetaMask to `http://127.0.0.1:9545/`, add a Custom RPC if that network doesn't already exist:
 
-        Network: integration (id: 17)
-          Forum: 0x84617303947304444ceb641582c024f277bbf4ff
-          Lottery: 0x277ad07109fe52a742b808a3e6765ee1ad0e7ad2
-          Migrations: 0xa782e56950bdd9f5c3e8693c9d2a78e524e3e612
-          Token: 0x01c957395029e9accbcb25a6ab72c618252cacf9
+![MetaMaskNetwork](https://www.dropbox.com/s/gtjut6mz97owleo/MetaMaskNetwork.png?raw=1)
 
 
 #### Ganache
