@@ -1,6 +1,6 @@
 {
-  "name": "message_board_reactjs",
-  "version": "0.1.0",
+  "name": "menlo_one_townhall",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bl": "^1.2.2",

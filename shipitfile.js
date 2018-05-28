@@ -9,7 +9,7 @@ module.exports = shipit => {
   shipit.initConfig({
     default: {
       deployTo: '/var/www/menlo-message-board',
-      repositoryUrl: 'https://github.com/vulcanize/message_board_reactjs.git',
+      repositoryUrl: 'https://github.com/MenloOne/townhall',
     },
     staging: {
       key:     deployment_key,

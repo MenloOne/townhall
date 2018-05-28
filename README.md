@@ -1,4 +1,8 @@
-# Menlo Town Hall
+# Menlo One TownHall
+
+[https://www.menlo.one/#/townhall](https://www.menlo.one/#/townhall)
+
+[https://www.menlo.one/](https://www.menlo.one/)
 
 ## Development
 
@@ -16,7 +20,7 @@ We assume `brew` for package management to install `IPFS` and other dependencies
 
 #### IPFS
 
-The Town Hall uses [IPFS](https://ipfs.io/) for storage of messages.
+TownHall uses [IPFS](https://ipfs.io/) for storage of messages.
 
 Menlo specific setup of IPFS can be installed and configured via:
 
@@ -40,8 +44,8 @@ Import this private key into MetaMask for use with `truffle develop` and `Ganach
 ### Install app and dependencies
 
 1. Install nvm and node: `brew install nvm && nvm install`
-2. Clone the repo: `git clone git@github.com:vulcanize/message_board_reactjs.git`
-3. Install dependencies: `cd message_board_reactjs && nvm use && yarn install`
+2. Clone the repo: `git clone git@github.com:MenloOne/townhall.git`
+3. Install dependencies: `cd townhall && nvm use && yarn install`
 
 ### Run the application
 
@@ -50,7 +54,7 @@ Import this private key into MetaMask for use with `truffle develop` and `Ganach
 3. Now, deploy the contracts: `yarn run truffle deploy`
 4. Run the app: `yarn start`
 
-### Interact with Town Hall
+### Interact with TownHall
 
 A browser window should open after starting: `http://localhost:3000/`
 
@@ -145,7 +149,7 @@ Parity has a lot of config and features: [Read the effin manual](https://wiki.pa
 
 ### Testing
 
-For testing the town hall dapp:
+For testing the TownHall dapp:
 
       yarn test
 
