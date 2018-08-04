@@ -12,9 +12,8 @@ let trustee2 = web3.eth.accounts.create();
 let trustee3 = web3.eth.accounts.create();
 let poster = web3.eth.accounts.create();
 
-let geth_dev = ''
-let parity_dev = '0x00a329c0648769a73afac7f9381e08fb43dbea72'
-
+require('dotenv').config()
+var parity_dev = process.env.MENLO_PERSONAL
 
 var tx = web3.eth.sendTransaction({from: parity_dev,
                                      to: poster.address,
@@ -23,7 +22,9 @@ var tx = web3.eth.sendTransaction({from: parity_dev,
 .then(function(receipt){
 });
 
-console.log("Add the following accounts to your .env:")
+console.log("Make sure you approve the following transactions in Parity UI\n")
+
+console.log("Add the following to your .env:")
 console.log("MENLO_TENET_1=" + trustee1.address)
 console.log("MENLO_TENET_2=" + trustee2.address)
 console.log("MENLO_TENET_3=" + trustee3.address)

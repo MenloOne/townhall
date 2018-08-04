@@ -51,7 +51,7 @@ Import this private key into MetaMask for use with `truffle develop` and `Ganach
 
 1. Run a local dev blockchain in a separate window: `yarn run truffle develop`
 2. Run IPFS daemon in a separate window: `ipfs daemon`
-3. Now, deploy the contracts: `yarn run truffle deploy`
+3. Now, deploy the contracts: `yarn run truffle deploy --network develop`
 4. Run the app: `yarn start`
 
 ### Interact with TownHall

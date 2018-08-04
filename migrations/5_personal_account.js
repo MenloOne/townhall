@@ -4,13 +4,13 @@ var Forum = artifacts.require("./Forum.sol");
 module.exports = (deployer, network) => {
   var personal;
 
-  if ((network == "development") || (network == "ganache")) {
+  if (network == "develop") {
     // static truffle develop accounts
     // candy maple cake sugar pudding cream honey rich smooth crumble sweet treat
-    personal = '0x0d1d4e623d10f9fba5db95830f7d3839406c6af2';
+    personal = '0x2932b7a2355d6fecc4b5c0b6bd44cc31df247a2e';
   } else {
     require('dotenv').config()
-    personal = process.env.MENLO_POSTER
+    personal = process.env.MENLO_PERSONAL
   }
 
   // Fund personal account with MET
