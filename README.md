@@ -1,8 +1,8 @@
 # Menlo One TownHall
 
-[https://www.menlo.one/](https://www.menlo.one/)
-
 [https://www.menlo.one/#/townhall](https://www.menlo.one/#/townhall)
+
+[https://www.menlo.one/](https://www.menlo.one/)
 
 ## Development
 
