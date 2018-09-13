@@ -1,8 +1,16 @@
-# Menlo One TownHall
+# Menlo One TownHall has been replaced by Menlo One Expo
+
+
+## Click through to the [https://github.com/expo](Expo Github)
+## [https://expo.menlo.one](Use Expo on Kovan)
+
+
+Find out about Menlo: [https://www.menlo.one/](https://www.menlo.one/)
+
+
+# (Deprecated)
 
 [https://www.menlo.one/#/townhall](https://www.menlo.one/#/townhall)
-
-[https://www.menlo.one/](https://www.menlo.one/)
 
 ## Development
 
