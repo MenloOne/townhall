@@ -1,8 +1,8 @@
 # Menlo One TownHall has been replaced by Menlo One Expo
 
 
-## Click through to the [https://github.com/expo](Expo Github)
-## [https://expo.menlo.one](Use Expo on Kovan)
+## Click through to the [Expo Github](https://github.com/expo)
+## [Use Expo on Kovan](https://expo.menlo.one)
 
 
 Find out about Menlo: [https://www.menlo.one/](https://www.menlo.one/)
